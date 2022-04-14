@@ -95,7 +95,11 @@ app.get('/api/product/search',function(req, res){//這則是另外一種，用bo
 	// 	console.log(result);
 	// });
 
-	res.send("keyword is : "+keyword);
+	//應該返回 JSON 格式的資料
+
+	res.json({
+		keyword:keyword
+	});
 })
 
 //這個可能要加Detail_id (since it is one single product and above of them are a bunch of products)
