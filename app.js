@@ -26,7 +26,7 @@ app.use(bodyParser.urlencoded({extended: false}));
 //這是首頁
 app.get('/', function (req, res) {
 
-	//test
+	//get data test
 	conn.query('SELECT * FROM `product`', function(err, result, fields){
 		if(err) throw err;
 		console.log(result[0].title);
@@ -44,7 +44,23 @@ app.get('/', function (req, res) {
 //Product Details API
 //Product Create API
 //這個比較看不懂.... (但應該就是商品的數量，可能也要根據不同種類區分)
-app.get('/Product/List/:id',function(req, res) { //這是其中一種取得parameter的方法
+/*
+	API : Get product list
+	URL :
+		https://xxx.xxx.xxx.xxx/api/product/list/:id
+	METHOD : 
+		GET
+	PARAMETERS : 
+		type : String
+		num_page : int
+	RETURN : 
+		STATUS : 200 OK
+		JSON :
+		{
+			product object
+		}
+*/
+app.get('/api/product/list/:id',function(req, res) { //這是其中一種取得parameter的方法
 	//取得page_id
 	var page_id = req.params.id;
 
@@ -59,7 +75,7 @@ app.get('/Product/List/:id',function(req, res) { //這是其中一種取得param
 })
 
 //他要的是keywork看有沒有符合的title (Product Title)
-app.get('/product/search',function(req, res){//這則是另外一種，用body-parser的方式
+app.get('/api/product/search',function(req, res){//這則是另外一種，用body-parser的方式
 	//取得查詢的keyword
 	//var keyword = JSON.parse(req.body);
 
@@ -70,11 +86,11 @@ app.get('/product/search',function(req, res){//這則是另外一種，用body-p
 	// });
 
 	//test
-	res.send(JSON.stringify(req.body));
+	return req.body;
 })
 
-//這個可能要加Detail_id
-app.get('/product/details',function(req, res){
+//這個可能要加Detail_id (since it is one single product and above of them are a bunch of products)
+app.get('/api/product',function(req, res){
 	//取得查詢的detail_id
 	//var detail_id = JSON.parse(req.body);
 
@@ -84,7 +100,7 @@ app.get('/product/details',function(req, res){
 })
 
 //要加上所有產品Database需要的Column
-app.post('/Product',function(req, res){
+app.post('/api/product',function(req, res){
 	
 })
 
