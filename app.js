@@ -4,18 +4,18 @@ var app = express();
 var mysql = require('mysql');
 
 //Database Setting up
-// let conn = mysql.createConnection({
-// 	host: 'localhost',
-// 	user: 'root',
-// 	password: '',
-// 	database: 'todoapp'
-// });
+var conn = mysql.createConnection({
+	host: '127.0.0.1',
+	user: 'root',
+	password: 'young0709',
+	database: 'stylist'
+});
 
 // 建立連線後不論是否成功都會呼叫
-// conn.connect(function(err){
-// 	if(err) throw err;
-// 	console.log('connect success!');
-// });
+conn.connect(function(err){
+	if(err) throw err;
+ 	console.log('connect success!');
+});
 
 //使用bodyparser
 //app.use(bodyParser.urlencoded({ extended: true}))
