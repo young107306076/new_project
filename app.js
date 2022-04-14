@@ -1,20 +1,27 @@
 var express = require('express');
+const bodyParser = require('body-parser');
 var app = express();
-var mysql = require('mysql')
+var mysql = require('mysql');
 
 //Database Setting up
-let conn = mysql.createConnection({
-	host: 'localhost',
-	user: 'root',
-	password: '',
-	database: 'todoapp'
-});
+// let conn = mysql.createConnection({
+// 	host: 'localhost',
+// 	user: 'root',
+// 	password: '',
+// 	database: 'todoapp'
+// });
 
 // 建立連線後不論是否成功都會呼叫
-conn.connect(function(err){
-	if(err) throw err;
-	console.log('connect success!');
-});
+// conn.connect(function(err){
+// 	if(err) throw err;
+// 	console.log('connect success!');
+// });
+
+//使用bodyparser
+//app.use(bodyParser.urlencoded({ extended: true}))
+//app.use(require('connect').bodyParser());
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended: false}));
 
 //這是首頁
 app.get('/', function (req, res) {
@@ -42,9 +49,9 @@ app.get('/Product/List/:id',function(req, res) { //這是其中一種取得param
 })
 
 //他要的是keywork看有沒有符合的title (Product Title)
-app.get('/Product/Search',function(req, res){//這則是另外一種，用body-parser的方式
+app.get('/product/search',function(req, res){//這則是另外一種，用body-parser的方式
 	//取得查詢的keyword
-	var keyword = req.body.keyword;
+	//var keyword = JSON.parse(req.body);
 
 	//取得符合該關鍵字的產品資訊
 	// conn.query('SELECT * FROM `user`', function(err, result, fields){
@@ -53,16 +60,17 @@ app.get('/Product/Search',function(req, res){//這則是另外一種，用body-p
 	// });
 
 	//test
-	console.log("關鍵字"+keyword);
+	res.send(JSON.stringify(req.body));
 })
 
 //這個可能要加Detail_id
-app.get('/Product/Details',function(req, res){
+app.get('/product/details',function(req, res){
 	//取得查詢的detail_id
-	var detail_id = req.body.id;
+	//var detail_id = JSON.parse(req.body);
 
+	//console.log(JSON.stringify(detail_id));
 	//test
-	console.log('查詢'+detail_id);
+	res.send(JSON.stringify(req.body));
 })
 
 //要加上所有產品Database需要的Column
