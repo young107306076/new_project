@@ -29,7 +29,7 @@ app.get('/', function (req, res) {
 	//test
 	conn.query('SELECT * FROM `product`', function(err, result, fields){
 		if(err) throw err;
-		console.log(result);
+		console.log(result[0].title);
 	});
 
 	console.log( 'select ended!' );
