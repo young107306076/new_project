@@ -25,6 +25,16 @@ app.use(bodyParser.urlencoded({extended: false}));
 
 //這是首頁
 app.get('/', function (req, res) {
+
+	//test
+	conn.query('SELECT * FROM `product`', function(err, result, fields){
+		if(err) throw err;
+		console.log(result);
+	});
+
+	console.log( 'select ended!' );
+
+
 	res.send('Hello World');
 })
 
