@@ -86,7 +86,7 @@ app.get('/api/product/search',function(req, res){//這則是另外一種，用bo
 	// });
 
 	//test
-	return req.body;
+	console.log(req.body);
 })
 
 //這個可能要加Detail_id (since it is one single product and above of them are a bunch of products)
