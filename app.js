@@ -170,7 +170,7 @@ app.post('/api/v1/product',function(req, res){
 	var trans = conn.startTransaction();
 	trans.query(query,function(err,info){
 		if(err){
-			//throw err;
+			throw err;
 			trans.rollback();
 		}
 		else{
