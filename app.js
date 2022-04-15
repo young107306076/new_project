@@ -9,6 +9,8 @@ const swaggerFile = require('./swagger_output.json')
 
 var app = express();
 var mysql = require('mysql');
+var queues = require(' mysql-queues ');
+const DEBUG = true;
 
 app.use(
 	'/apidoc',
@@ -17,18 +19,23 @@ app.use(
 );
 
 //Database Setting up
-// var conn = mysql.createConnection({
-// 	host: '127.0.0.1',
-// 	user: 'root',
-// 	password: 'young0709',
-// 	database: 'stylist'
-// });
+var conn = mysql.createConnection({
+ 	host: '127.0.0.1',
+ 	user: 'root',
+ 	password: 'young0709',
+ 	database: 'stylist'
+});
 
-// // 建立連線後不論是否成功都會呼叫
-// conn.connect(function(err){
-// 	if(err) throw err;
-//  	console.log('connect success!');
-// });
+
+
+// 建立連線後不論是否成功都會呼叫
+conn.connect(function(err){
+ 	if(err) throw err;
+  	console.log('connect success!');
+});
+
+//transaction的前置
+queues(conn, DEBUG);
 
 //使用bodyparser
 //app.use(bodyParser.urlencoded({ extended: true}))
@@ -39,10 +46,10 @@ app.use(bodyParser.urlencoded({extended: false}));
 //這是首頁
 app.get('/', function (req, res) {
 	//設計阻擋 SQL Injection 的部分
-	
+
 
 	//get data test
-	// conn.query('SELECT * FROM `product`', function(err, result, fields){
+	//	conn.query('SELECT * FROM `product`', function(err, result, fields){
 	// 	if(err) throw err;
 	// 	console.log(result[0].title);
 	// });
@@ -121,19 +128,68 @@ app.get('/api/v1/product/search',function(req, res){//這則是另外一種，�
 
 //這個可能要加Detail_id (since it is one single product and above of them are a bunch of products)
 app.get('/api/v1/product',function(req, res){
-	//取得查詢的detail_id
-	var detail_id = JSON.parse(req.query.id);
+
+	//取得查詢的product id
+	var product_id = req.query.id;
+
+	//set up query
+	var query = 'select P.title, PD.type '+ 
+				'from '+
+					'product as P '+
+					'inner join '+
+						'product_detail as PD '+
+						'on PD.product_id=P.id '+
+				'where P.id=?';
+
+	//取得符合該關鍵字的產品資訊
+	conn.query(query,[product_id], function(err, result, fields){
+	 	if(err) throw err;
+	 	console.log(result);
+	});	
 
 	//console.log(JSON.stringify(detail_id));
 	//test
-	res.send("detail_id: "+detail_id);
+	res.send("detail_id: "+product_id);
 })
 
 //要加上所有產品Database需要的Column
 app.post('/api/v1/product',function(req, res){
-	var product_info = req.query;
+	
+	//Get request Parameter
+	var product_id = req.query.id;
+	var product_name = req.query.name;
+	var product_detail_id = req.query.detail_id;
+	var product_type = req.query.type;
+	var item_num = req.query.num;
 
-	console.log(product_info);
+	//Create query1, query2
+	query = "insert table product values ( '"+product_id+"','"+product_name+"','2022-04-15','2022-04-15')";
+	query2 = "insert table product_detail values ('"+product_detail_id+"','"+product_id+"','"+product_type+"','"+item_num+"')";
+
+	//use transaction insert into two tables
+	var trans = conn.startTransaction();
+	trans.query(query,function(err,info){
+		if(err){
+			//throw err;
+			trans.rollback();
+		}
+		else{
+			trans.commit(function(err,info){
+				console.log(info);
+				trans.query(query2,function(err,info){
+					if(err){
+						//throw err;
+						trans.rollback();
+					}
+					else{
+						console.log(info);
+						res.send("200OK");
+					}
+				})
+			})
+		}
+	});
+	trans.execute();
 })
 
 app.get('/admin',(req, res)=>{
