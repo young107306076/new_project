@@ -9,7 +9,7 @@ const swaggerFile = require('./swagger_output.json')
 
 var app = express();
 var mysql = require('mysql');
-var queues = require(' mysql-queues ');
+var queues = require('mysql-queues');
 const DEBUG = true;
 
 app.use(
