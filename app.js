@@ -133,7 +133,7 @@ app.get('/api/v1/product',function(req, res){
 	var product_id = req.query.id;
 
 	//set up query
-	var query = 'select P.title, PD.type '+ 
+	var query = 'select P.title, PD.product_type '+ 
 				'from '+
 					'product as P '+
 					'inner join '+
