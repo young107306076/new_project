@@ -1,21 +1,34 @@
 var express = require('express');
 const bodyParser = require('body-parser');
+
+const swaggerUi = require('swagger-ui-express');
+const swaggerFile = require('./swagger_output.json')
+
+// const YAML = require('yamljs')
+// const swaggerDocument = YAML.load('./swagger.yml')
+
 var app = express();
 var mysql = require('mysql');
 
-//Database Setting up
-var conn = mysql.createConnection({
-	host: '127.0.0.1',
-	user: 'root',
-	password: 'young0709',
-	database: 'stylist'
-});
+app.use(
+	'/apidoc',
+	swaggerUi.serve,
+	swaggerUi.setup(swaggerFile)
+);
 
-// 建立連線後不論是否成功都會呼叫
-conn.connect(function(err){
-	if(err) throw err;
- 	console.log('connect success!');
-});
+//Database Setting up
+// var conn = mysql.createConnection({
+// 	host: '127.0.0.1',
+// 	user: 'root',
+// 	password: 'young0709',
+// 	database: 'stylist'
+// });
+
+// // 建立連線後不論是否成功都會呼叫
+// conn.connect(function(err){
+// 	if(err) throw err;
+//  	console.log('connect success!');
+// });
 
 //使用bodyparser
 //app.use(bodyParser.urlencoded({ extended: true}))
@@ -25,14 +38,16 @@ app.use(bodyParser.urlencoded({extended: false}));
 
 //這是首頁
 app.get('/', function (req, res) {
+	//設計阻擋 SQL Injection 的部分
+	
 
 	//get data test
-	conn.query('SELECT * FROM `product`', function(err, result, fields){
-		if(err) throw err;
-		console.log(result[0].title);
-	});
+	// conn.query('SELECT * FROM `product`', function(err, result, fields){
+	// 	if(err) throw err;
+	// 	console.log(result[0].title);
+	// });
 
-	console.log( 'select ended!' );
+	// console.log( 'select ended!' );
 
 
 	res.send('Hello World');
@@ -60,9 +75,11 @@ app.get('/', function (req, res) {
 			product object
 		}
 */
-app.get('/api/product/list/:id',function(req, res) { //這是其中一種取得parameter的方法
+app.get('/api/v1/product/list/:category',function(req, res) { //這是其中一種取得parameter的方法
 	//取得page_id
-	var page_id = req.params.id;
+	var category = req.params.category;
+
+	var page_id = req.query.id;
 
 	//這裡打算找出所有產品，並用判斷式
 	//page_id=1，做第一次查詢
@@ -85,7 +102,7 @@ app.get('/api/product/list/:id',function(req, res) { //這是其中一種取得p
 })
 
 //他要的是keywork看有沒有符合的title (Product Title)
-app.get('/api/product/search',function(req, res){//這則是另外一種，用body-parser的方式
+app.get('/api/v1/product/search',function(req, res){//這則是另外一種，用body-parser的方式
 	//取得查詢的keyword
 	var keyword = req.query.keyword;
 
@@ -103,7 +120,7 @@ app.get('/api/product/search',function(req, res){//這則是另外一種，用bo
 })
 
 //這個可能要加Detail_id (since it is one single product and above of them are a bunch of products)
-app.get('/api/product',function(req, res){
+app.get('/api/v1/product',function(req, res){
 	//取得查詢的detail_id
 	var detail_id = JSON.parse(req.query.id);
 
@@ -113,10 +130,14 @@ app.get('/api/product',function(req, res){
 })
 
 //要加上所有產品Database需要的Column
-app.post('/api/product',function(req, res){
+app.post('/api/v1/product',function(req, res){
 	var product_info = req.query;
 
 	console.log(product_info);
+})
+
+app.get('/admin',(req, res)=>{
+
 })
 
 var server = app.listen(3000, function () {
