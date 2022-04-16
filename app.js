@@ -116,7 +116,7 @@ app.get('/api/v1/product/search',function(req, res){//這則是另外一種，�
 	var keyword = req.query.keyword;
 
 	//query setting
-	var query = "select * from product as P"+
+	var query = "select * from product as P "+
 					"inner join "+
 						"product_color as PC "+
 						"on PC.product_id = P.id "+
