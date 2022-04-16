@@ -164,10 +164,11 @@ app.post('/api/v1/product',function(req, res){
 	var product_name = req.query.name;
 	var product_detail_id = req.query.detail_id;
 	var product_type = req.query.type;
+	var product_color = req.query.color;
 
 	//Create query1, query2
 	query = "insert into product values ('"+product_id+"','"+product_name+"','2022-04-15','2022-04-15')";
-	query2 = "insert into product_detail values ('"+product_detail_id+"','"+product_id+"','"+product_type+"')";
+	query2 = "insert into product_detail values ('"+product_detail_id+"','"+product_id+"','"+product_type+"','"+product_color+"')";
 
 	//use transaction insert into two tables
 	var trans = conn.startTransaction();
