@@ -33,13 +33,13 @@ var connection = mysql.createConnection({
 
 
 // 建立連線後不論是否成功都會呼叫
-conn.connect(function(err){
+connection.connect(function(err){
  	if(err) throw err;
   	console.log('connect success!');
 });
 
 //transaction的前置
-queues(conn, DEBUG);
+queues(connection, DEBUG);
 
 //使用bodyparser
 //app.use(bodyParser.urlencoded({ extended: true}))
@@ -53,7 +53,7 @@ app.get('/', function (req, res) {
 
 
 	//get data test
-	//	conn.query('SELECT * FROM `product`', function(err, result, fields){
+	//	connection.query('SELECT * FROM `product`', function(err, result, fields){
 	// 	if(err) throw err;
 	// 	console.log(result[0].title);
 	// });
@@ -101,7 +101,7 @@ app.get('/api/v1/product/list/:category',function(req, res) { //這是其中一�
 				"where P.product_type=?";
 
 	//取得產品的各項資訊
-	conn.query(query,[category], function(err, result, fields){
+	connection.query(query,[category], function(err, result, fields){
 	 	if(err) throw err;
 	 	console.log(result);
 	});
@@ -126,7 +126,7 @@ app.get('/api/v1/product/search',function(req, res){//這則是另外一種，�
 				"where P.name=?";
 
 	//取得符合該關鍵字的產品資訊
-	conn.query(query, [keyword], function(err, result, fields){
+	connection.query(query, [keyword], function(err, result, fields){
 	 	if(err) throw err;
 	 	console.log(result);
 	});
@@ -156,7 +156,7 @@ app.get('/api/v1/product',function(req, res){
 				'where PD.id=?';
 
 	//取得符合該關鍵字的產品資訊
-	conn.query(query,[product_detail_id], function(err, result, fields){
+	connection.query(query,[product_detail_id], function(err, result, fields){
 	 	if(err) throw err;
 	 	console.log(result);
 	});	
