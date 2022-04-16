@@ -127,20 +127,21 @@ app.get('/api/v1/product/search',function(req, res){//這則是另外一種，�
 						"on PD.product_color_id=PC.id "+
 				"where P.name LIKE '%"+keyword+"%'";
 
+	//create return json
+	var return_object={};
+
 	//取得符合該關鍵字的產品資訊
 	connection.query(query, function(err, result, fields){
 	 	if(err) throw err;
 	 	//取出result的每筆資料
 		for(let i=0; i<result.length; i++){
+
 			console.log(result[i]);
+			//return_object[result[i].]
 		}
 	});
 
 	//應該返回 JSON 格式的資料
-
-	res.json({
-		keyword:keyword
-	});
 })
 
 //這個可能要加Detail_id (since it is one single product and above of them are a bunch of products)
