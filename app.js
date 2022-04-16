@@ -183,40 +183,43 @@ app.post('/api/v1/product',function(req, res){
 	query2 = "insert into product_color values ('"+product_color_id+"','"+product_id+"','"+product_color+"')";
 	query3 = "insert into product_detail values ('"+product_detail_id+"','"+product_color_id+"','"+product_size+"')";
 
-	//use transaction insert into two tables
-	var trans = conn.startTransaction();
-	trans.query(query,function(err,info){
-		if(err){
-			throw err;
-			trans.rollback();
-		}
-		else{
-			trans.commit(function(err,info){
-				console.log(info);
-				trans.query(query2,function(err,info){
-					if(err){
-						throw err;
-						trans.rollback();
+	//use transaction insert into three tables
+	connection.beginTransaction(function(err) {
+		if (err) { throw err; }
+		connection.query(query, title, function (error, results, fields) {
+			if (error) {
+				return connection.rollback(function() {
+				throw error;
+				});
+			}
+	  
+			connection.query(query2, log, function (error, results, fields) {
+				if (error) {
+					return connection.rollback(function() {
+						throw error;
+					});
+				}
+				
+				connection.query(query3, log, function (error, results, fields) {
+					if (error) {
+						return connection.rollback(function() {
+							throw error;
+						});
 					}
-					else{
-						trans.commit(function(err,info){
-							console.log(info);
-							trans.query(query2,function(err,info){
-								if(err){
-									throw err;
-									trans.rollback();
-								}
-								else{
-									console.log(info);
-									res.send("200_OK");
-								}
-							})
-						})
-					}
-				})
-			})
-		}
+					connection.commit(function(err) {
+						if (err) {
+							return connection.rollback(function() {
+							throw err;
+							});
+						}
+						console.log('success!');
+						res.send("200_ok");
+					});
+				});
+			});
+		});
 	});
+
 	trans.execute();
 })
 
