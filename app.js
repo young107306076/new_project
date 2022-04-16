@@ -195,7 +195,7 @@ app.post('/api/v1/product',function(req, res){
 				console.log(info);
 				trans.query(query2,function(err,info){
 					if(err){
-						//throw err;
+						throw err;
 						trans.rollback();
 					}
 					else{
@@ -203,7 +203,7 @@ app.post('/api/v1/product',function(req, res){
 							console.log(info);
 							trans.query(query2,function(err,info){
 								if(err){
-									//throw err;
+									throw err;
 									trans.rollback();
 								}
 								else{
