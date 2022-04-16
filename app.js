@@ -145,7 +145,7 @@ app.get('/api/v1/product',function(req, res){
 	var product_detail_id = req.query.detail_id;
 
 	//set up query
-	var query = 'select P.name, PD.product_type '+ 
+	var query = 'select P.name, P.product_type '+ 
 				'from product as P '+
 					'inner join '+
 						'product_color as PC '+
