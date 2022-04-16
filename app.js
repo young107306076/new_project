@@ -18,12 +18,16 @@ app.use(
 	swaggerUi.setup(swaggerFile)
 );
 
+//Set up Template Engine
+app.set('view engine', 'ejs');
+
 //Database Setting up
 var conn = mysql.createConnection({
  	host: '127.0.0.1',
  	user: 'root',
  	password: 'young0709',
- 	database: 'stylist'
+ 	database: 'stylist',
+	charset: 'UTF8_GENERAL_CI'
 });
 
 
@@ -133,7 +137,7 @@ app.get('/api/v1/product',function(req, res){
 	var product_id = req.query.id;
 
 	//set up query
-	var query = 'select P.title, PD.product_type '+ 
+	var query = 'select P.name, PD.product_type '+ 
 				'from '+
 					'product as P '+
 					'inner join '+
@@ -160,11 +164,10 @@ app.post('/api/v1/product',function(req, res){
 	var product_name = req.query.name;
 	var product_detail_id = req.query.detail_id;
 	var product_type = req.query.type;
-	var item_num = req.query.num;
 
 	//Create query1, query2
 	query = "insert into product values ('"+product_id+"','"+product_name+"','2022-04-15','2022-04-15')";
-	query2 = "insert into product_detail values ('"+product_detail_id+"','"+product_id+"','"+product_type+"','"+item_num+"')";
+	query2 = "insert into product_detail values ('"+product_detail_id+"','"+product_id+"','"+product_type+"')";
 
 	//use transaction insert into two tables
 	var trans = conn.startTransaction();
@@ -183,7 +186,7 @@ app.post('/api/v1/product',function(req, res){
 					}
 					else{
 						console.log(info);
-						res.send("200OK");
+						res.send("200_OK");
 					}
 				})
 			})
