@@ -106,7 +106,7 @@ app.get('/api/v1/product/list/:category',function(req, res) { //這是其中一�
 	//取得產品的各項資訊
 	connection.query(query,[category], function(err, result, fields){
 	 	if(err) throw err;
-		if(result<page_id*6){
+		if(result.length<page_id*6){
 			for(let i=0; i<result.length; i++){
 				console.log(result[i]);
 				//return_object[result[i].name]=result[i];
