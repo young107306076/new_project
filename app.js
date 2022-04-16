@@ -94,9 +94,11 @@ app.get('/api/v1/product/list/:category',function(req, res) { //這是其中一�
 
 	//這裡打算找出所有產品，並用判斷式
 	var query = "select * from product as P "+
+					"inner join product_color as PC "+
+					"on PC.product_id=P.id "+
 					"inner join product_detail as PD "+
-					"on PD.product_id=P.id "+
-				"where PD.product_type=?";
+					"on PD.product_color_id=PC.id "
+				"where P.product_type=?";
 
 	//取得產品的各項資訊
 	conn.query(query,[category], function(err, result, fields){
@@ -116,8 +118,11 @@ app.get('/api/v1/product/search',function(req, res){//這則是另外一種，�
 	//query setting
 	var query = "select * from product as P"+
 					"inner join "+
+						"product_color as PC "+
+						"on PC.product_id = P.id "+
+					"inner join "+
 						"product_detail as PD "+
-						"on PD.product_id = P.id "+
+						"on PD.product_color_id=PC.id "+
 				"where P.name=?";
 
 	//取得符合該關鍵字的產品資訊
@@ -141,11 +146,13 @@ app.get('/api/v1/product',function(req, res){
 
 	//set up query
 	var query = 'select P.name, PD.product_type '+ 
-				'from '+
-					'product as P '+
+				'from product as P '+
+					'inner join '+
+						'product_color as PC '+
+						'on PC.product_id=P.id '+
 					'inner join '+
 						'product_detail as PD '+
-						'on PD.product_id=P.id '+
+						'on PD.product_color_id=PC.id '+
 				'where PD.id=?';
 
 	//取得符合該關鍵字的產品資訊
@@ -168,10 +175,13 @@ app.post('/api/v1/product',function(req, res){
 	var product_detail_id = req.query.detail_id;
 	var product_type = req.query.type;
 	var product_color = req.query.color;
+	var product_color_id = req.query.color_id;
+	var product_size = req.query.size;
 
-	//Create query1, query2
-	query = "insert into product values ('"+product_id+"','"+product_name+"','2022-04-15','2022-04-15')";
-	query2 = "insert into product_detail values ('"+product_detail_id+"','"+product_id+"','"+product_type+"','"+product_color+"')";
+	//Create query1, query2, query3
+	query = "insert into product values ('"+product_id+"','"+product_name+"','"+product_type+"','2022-04-15','2022-04-15')";
+	query2 = "insert into product_color values ('"+product_color_id+"','"+product_id+"','"+product_color+"')";
+	query3 = "insert into product_detail values ('"+product_detail_id+"','"+product_color_id+"','"+product_size+"')";
 
 	//use transaction insert into two tables
 	var trans = conn.startTransaction();
@@ -189,8 +199,19 @@ app.post('/api/v1/product',function(req, res){
 						trans.rollback();
 					}
 					else{
-						console.log(info);
-						res.send("200_OK");
+						trans.commit(function(err,info){
+							console.log(info);
+							trans.query(query2,function(err,info){
+								if(err){
+									//throw err;
+									trans.rollback();
+								}
+								else{
+									console.log(info);
+									res.send("200_OK");
+								}
+							})
+						})
 					}
 				})
 			})
