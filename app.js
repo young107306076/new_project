@@ -139,10 +139,12 @@ app.get('/api/v1/product/search',function(req, res){//這則是另外一種，�
 			console.log(result[i]);
 			return_object[result[i].id]=result[i];
 		}
+
+		res.send(return_object);
 	});
 
 	//應該返回 JSON 格式的資料
-	res.send(return_object);
+	//res.send(return_object);
 })
 
 //這個可能要加Detail_id (since it is one single product and above of them are a bunch of products)
