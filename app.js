@@ -220,7 +220,7 @@ app.post('/api/v1/product',function(req, res){
 		});
 	});
 
-	trans.execute();
+	//trans.execute();
 })
 
 app.get('/admin',(req, res)=>{
