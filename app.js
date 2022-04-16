@@ -108,12 +108,13 @@ app.get('/api/v1/product/list/:category',function(req, res) { //這是其中一�
 	 	if(err) throw err;
 		if(result<page_id*6){
 			for(let i=0; i<result.length; i++){
-				return_object[result[i].name]=result[i];
+				console.log(result[i]);
+				//return_object[result[i].name]=result[i];
 			}
 		}
 		else{
 			for(let i=(page_id-1)*6; i<page_id*6+1; i++){
-				return_object[result[i].name]=result[i];
+				//return_object[result[i].name]=result[i];
 			}
 		}
 		res.send(return_object);
