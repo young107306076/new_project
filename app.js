@@ -186,21 +186,21 @@ app.post('/api/v1/product',function(req, res){
 	//use transaction insert into three tables
 	connection.beginTransaction(function(err) {
 		if (err) { throw err; }
-		connection.query(query, title, function (error, results, fields) {
+		connection.query(query, function (error, results, fields) {
 			if (error) {
 				return connection.rollback(function() {
 				throw error;
 				});
 			}
 	  
-			connection.query(query2, log, function (error, results, fields) {
+			connection.query(query2, function (error, results, fields) {
 				if (error) {
 					return connection.rollback(function() {
 						throw error;
 					});
 				}
 				
-				connection.query(query3, log, function (error, results, fields) {
+				connection.query(query3, function (error, results, fields) {
 					if (error) {
 						return connection.rollback(function() {
 							throw error;
