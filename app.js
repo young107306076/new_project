@@ -99,17 +99,25 @@ app.get('/api/v1/product/list/:category',function(req, res) { //這是其中一�
 					"inner join product_detail as PD "+
 					"on PD.product_color_id=PC.id "
 				"where P.product_type=?";
+	
+	//setup return object
+	var return_object={};
 
 	//取得產品的各項資訊
 	connection.query(query,[category], function(err, result, fields){
 	 	if(err) throw err;
-	 	for(let i=0; i<result.length; i++){
-			console.log(result[i]);
+		if(result<page_id*6){
+			for(let i=0; i<result.length; i++){
+				return_object[result[i].name]=result[i];
+			}
 		}
+		else{
+			for(let i=(page_id-1)*6; i<page_id*6+1; i++){
+				return_object[result[i].name]=result[i];
+			}
+		}
+		res.send(return_object);
 	});
-
-	//test
-	res.send("取得Page: "+page_id);
 })
 
 //他要的是keywork看有沒有符合的title (Product Title)
@@ -137,7 +145,7 @@ app.get('/api/v1/product/search',function(req, res){//這則是另外一種，�
 		for(let i=0; i<result.length; i++){
 
 			console.log(result[i]);
-			return_object[result[i].id]=result[i];
+			return_object[result[i].name]=result[i];
 		}
 
 		res.send(return_object);
