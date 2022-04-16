@@ -93,20 +93,16 @@ app.get('/api/v1/product/list/:category',function(req, res) { //這是其中一�
 	var page_id = req.query.id;
 
 	//這裡打算找出所有產品，並用判斷式
-	//page_id=1，做第一次查詢
-	if (page_id==1){
-
-	}
-	//page_id!=1，可是查詢都要直接查，所以應該是用迴圈解決就好
-	else{
-
-	}
+	var query = "select * from product as P "+
+					"inner join product_detail as PD "+
+					"on PD.product_id=P.id "+
+				"where PD.product_type=?";
 
 	//取得產品的各項資訊
-	// conn.query('SELECT * FROM `user`', function(err, result, fields){
-	// 	if(err) throw err;
-	// 	console.log(result);
-	// });
+	conn.query(query,[category], function(err, result, fields){
+	 	if(err) throw err;
+	 	console.log(result);
+	});
 
 	//test
 	res.send("取得Page: "+page_id);
@@ -117,11 +113,18 @@ app.get('/api/v1/product/search',function(req, res){//這則是另外一種，�
 	//取得查詢的keyword
 	var keyword = req.query.keyword;
 
+	//query setting
+	var query = "select * from product as P"+
+					"inner join "+
+						"product_detail as PD "+
+						"on PD.product_id = P.id "+
+				"where P.name=?";
+
 	//取得符合該關鍵字的產品資訊
-	// conn.query('SELECT * FROM `user`', function(err, result, fields){
-	// 	if(err) throw err;
-	// 	console.log(result);
-	// });
+	conn.query(query, [keyword], function(err, result, fields){
+	 	if(err) throw err;
+	 	console.log(result);
+	});
 
 	//應該返回 JSON 格式的資料
 
@@ -134,7 +137,7 @@ app.get('/api/v1/product/search',function(req, res){//這則是另外一種，�
 app.get('/api/v1/product',function(req, res){
 
 	//取得查詢的product id
-	var product_id = req.query.id;
+	var product_detail_id = req.query.detail_id;
 
 	//set up query
 	var query = 'select P.name, PD.product_type '+ 
@@ -143,17 +146,17 @@ app.get('/api/v1/product',function(req, res){
 					'inner join '+
 						'product_detail as PD '+
 						'on PD.product_id=P.id '+
-				'where P.id=?';
+				'where PD.id=?';
 
 	//取得符合該關鍵字的產品資訊
-	conn.query(query,[product_id], function(err, result, fields){
+	conn.query(query,[product_detail_id], function(err, result, fields){
 	 	if(err) throw err;
 	 	console.log(result);
 	});	
 
 	//console.log(JSON.stringify(detail_id));
 	//test
-	res.send("detail_id: "+product_id);
+	res.send("detail_id: "+product_detail_id);
 })
 
 //要加上所有產品Database需要的Column
