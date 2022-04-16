@@ -22,7 +22,7 @@ app.use(
 app.set('view engine', 'ejs');
 
 //Database Setting up
-var conn = mysql.createConnection({
+var connection = mysql.createConnection({
  	host: '127.0.0.1',
  	user: 'root',
  	password: 'young0709',
