@@ -179,7 +179,7 @@ app.post('/api/v1/product',function(req, res){
 	var product_size = req.query.size;
 
 	//Create query1, query2, query3
-	query = "insert into product values ('"+product_id+"','"+product_name+"','"+product_type+"','2022-04-15','2022-04-15')";
+	query = "insert into product values ('"+product_id+"','"+product_name+"','"+product_type+"','2022-04-15')";
 	query2 = "insert into product_color values ('"+product_color_id+"','"+product_id+"','"+product_color+"')";
 	query3 = "insert into product_detail values ('"+product_detail_id+"','"+product_color_id+"','"+product_size+"')";
 
