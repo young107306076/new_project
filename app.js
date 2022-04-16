@@ -103,7 +103,9 @@ app.get('/api/v1/product/list/:category',function(req, res) { //這是其中一�
 	//取得產品的各項資訊
 	connection.query(query,[category], function(err, result, fields){
 	 	if(err) throw err;
-	 	console.log(result);
+	 	for(let i=0; i<result.length; i++){
+			console.log(result[i]);
+		}
 	});
 
 	//test
@@ -123,12 +125,15 @@ app.get('/api/v1/product/search',function(req, res){//這則是另外一種，�
 					"inner join "+
 						"product_detail as PD "+
 						"on PD.product_color_id=PC.id "+
-				"where P.name=?";
+				"where P.name LIKE '%"+keyword+"%'";
 
 	//取得符合該關鍵字的產品資訊
-	connection.query(query, [keyword], function(err, result, fields){
+	connection.query(query, function(err, result, fields){
 	 	if(err) throw err;
-	 	console.log(result);
+	 	//取出result的每筆資料
+		for(let i=0; i<result.length; i++){
+			console.log(result[i]);
+		}
 	});
 
 	//應該返回 JSON 格式的資料
@@ -158,12 +163,12 @@ app.get('/api/v1/product',function(req, res){
 	//取得符合該關鍵字的產品資訊
 	connection.query(query,[product_detail_id], function(err, result, fields){
 	 	if(err) throw err;
-	 	console.log(result);
+		res.send(result[0]);
 	});	
 
 	//console.log(JSON.stringify(detail_id));
 	//test
-	res.send("detail_id: "+product_detail_id);
+	//res.send("detail_id: "+product_detail_id);
 })
 
 //要加上所有產品Database需要的Column
