@@ -191,13 +191,13 @@ app.post('/api/v1/product/test', function(req, res){
 app.post('/api/v1/product',function(req, res){
 	
 	//Get request Parameter
-	var product_id = req.query.id;
-	var product_name = req.query.name;
-	var product_detail_id = req.query.detail_id;
-	var product_type = req.query.type;
-	var product_color = req.query.color;
-	var product_color_id = req.query.color_id;
-	var product_size = req.query.size;
+	var product_id = req.body.id;
+	var product_name = req.body.name;
+	var product_detail_id = req.body.detail_id;
+	var product_type = req.body.type;
+	var product_color = req.body.color;
+	var product_color_id = req.body.color_id;
+	var product_size = req.body.size;
 
 	//Create query1, query2, query3
 	query = "insert into product values ('"+product_id+"','"+product_name+"','"+product_type+"','2022-04-15')";
