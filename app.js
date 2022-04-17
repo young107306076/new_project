@@ -234,7 +234,7 @@ app.post('/api/v1/product',function(req, res){
 							});
 						}
 						console.log('success!');
-						return "200_ok";
+						res.send("200_ok");
 					});
 				});
 			});
