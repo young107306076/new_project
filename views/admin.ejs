@@ -25,6 +25,7 @@
 						},
 						dataType: "json",
 						success: function (response) {
+							console.log(response);
 							if(response=="200_ok"){
 								$("#product_id").empty();
 								$("#product_detail_id").empty();
@@ -42,14 +43,6 @@
 					});
 				});
 			});
-		</script>
-		<script>
-			if(typeof(jQuery)=="undefined"){
-				alert("jQuery is not imported");
-			}
-			else{
-				alert("jQuery is imported");
-			}
 		</script>
 	</head>
 	<body>
