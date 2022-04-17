@@ -11,19 +11,18 @@
 			//$("#navbar-header").load("./navbar.ejs");
 			$(document).ready(function(){
 				$("#product_post_submit").click(function(){
-					alert($("#product_id").val());
 					$.ajax({
 						type: "POST",
 						url: "http://ec2-52-9-59-184.us-west-1.compute.amazonaws.com/api/v1/product/test",
 						dataType: "json",
 						data:{
-							id:$("#product_id").val(),
-							detail_id:$("#product_detail_id").val(),
-							color_id:$("#product_color_id").val(),
-							name:$("#product_name").val(),
-							type:$("#product_type").val(),
-							color:$("#product_color").val(),
-							size:$("#product_size").val()
+							"id":$("#product_id").val(),
+							"detail_id":$("#product_detail_id").val(),
+							"color_id":$("#product_color_id").val(),
+							"name":$("#product_name").val(),
+							"type":$("#product_type").val(),
+							"color":$("#product_color").val(),
+							"size":$("#product_size").val()
 						},
 						success: function (response) {
 							if(response=="200_ok"){
