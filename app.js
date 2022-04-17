@@ -144,8 +144,6 @@ app.get('/api/v1/product/search',function(req, res){//這則是另外一種，�
 	 	if(err) throw err;
 	 	//取出result的每筆資料
 		for(let i=0; i<result.length; i++){
-
-			console.log(result[i]);
 			return_object[result[i].name]=result[i];
 		}
 
@@ -243,6 +241,8 @@ app.post('/api/v1/product',function(req, res){
 
 app.get('/admin',(req, res)=>{
 
+	//render .ejs static File
+	res.send('admin');
 })
 
 var server = app.listen(3000, function () {
