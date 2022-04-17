@@ -9,37 +9,39 @@
 		<script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
 		<script>
 			//$("#navbar-header").load("./navbar.ejs");
-			$("#product_post_submit").click(function(){
-				$.ajax({
-					type: "POST",
-					url: "http://ec2-52-9-59-184.us-west-1.compute.amazonaws.com/api/v1/product",
-					dataType: "json",
-					data:{
-						id:$("#product_id").val(),
-						detail_id:$("#product_detail_id").val(),
-						color_id:$("#product_color_id").val(),
-						name:$("#product_name").val(),
-						type:$("#product_type").val(),
-						color:$("#product_color").val(),
-						size:$("#product_size").val()
-					},
-					success: function (response) {
-						if(response=="200_ok"){
-							$("#product_id").empty();
-							$("#product_detail_id").empty();
-							$("#product_color_id").empty();
-							$("#product_name").empty();
-							$("#product_type").empty();
-							$("#product_color").empty();
-							$("#product_size").empty();
-							alert("Already Updated");
+			$(document).ready(function(){
+				$("#product_post_submit").click(function(){
+					$.ajax({
+						type: "POST",
+						url: "http://ec2-52-9-59-184.us-west-1.compute.amazonaws.com/api/v1/product",
+						dataType: "json",
+						data:{
+							id:$("#product_id").val(),
+							detail_id:$("#product_detail_id").val(),
+							color_id:$("#product_color_id").val(),
+							name:$("#product_name").val(),
+							type:$("#product_type").val(),
+							color:$("#product_color").val(),
+							size:$("#product_size").val()
+						},
+						success: function (response) {
+							if(response=="200_ok"){
+								$("#product_id").empty();
+								$("#product_detail_id").empty();
+								$("#product_color_id").empty();
+								$("#product_name").empty();
+								$("#product_type").empty();
+								$("#product_color").empty();
+								$("#product_size").empty();
+								alert("Already Updated");
+							}
+						},
+						error: function (thrownError) {
+							console.log(thrownError);
 						}
-					},
-					error: function (thrownError) {
-						console.log(thrownError);
-					}
+					});
 				});
-			})
+			});
 		</script>
 		<script>
 			if(typeof(jQuery)=="undefined"){
