@@ -183,8 +183,8 @@ app.get('/api/v1/product',function(req, res){
 })
 
 app.post('/api/v1/product/test', function(req, res){
-	console.log(req);
-	console.log(req.query.id);
+	console.log(req.body);
+	//console.log(req.query.id);
 })
 
 //要加上所有產品Database需要的Column
