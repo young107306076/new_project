@@ -242,7 +242,7 @@ app.post('/api/v1/product',function(req, res){
 app.get('/admin',(req, res)=>{
 
 	//render .ejs static File
-	res.send('admin');
+	res.render('admin');
 })
 
 var server = app.listen(3000, function () {
