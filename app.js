@@ -183,7 +183,7 @@ app.get('/api/v1/product',function(req, res){
 })
 
 app.post('/api/v1/product/test', function(req, res){
-	console.log(req.query);
+	console.log(req);
 	console.log(req.query.id);
 })
 
