@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+	<head>  
+		<meta charset="utf-8">  
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">  
+		<meta name="viewport" content="width=device-width, initial-scale=1">  
+		<title>實作EJS</title>   
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+		<script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+		<script>
+			//$("#navbar-header").load("./navbar.ejs");
+			$(document).ready(function(){
+				$("#product_post_submit").click(function(){
+					$.ajax({
+						type: "POST",
+						url: "http://ec2-52-9-59-184.us-west-1.compute.amazonaws.com/api/v1/product",
+						data:{
+							id:$("#product_id").val(),
+							detail_id:$("#product_detail_id").val(),
+							color_id:$("#product_color_id").val(),
+							name:$("#product_name").val(),
+							type:$("#product_type").val(),
+							color:$("#product_color").val(),
+							size:$("#product_size").val()
+						},
+						dataType: "json",
+						success: function (response) {
+							console.log(response);
+							if(response=="200_ok"){
+								$("#product_id").empty();
+								$("#product_detail_id").empty();
+								$("#product_color_id").empty();
+								$("#product_name").empty();
+								$("#product_type").empty();
+								$("#product_color").empty();
+								$("#product_size").empty();
+								alert("Already Updated");
+							}
+						},
+						error: function (thrownError) {
+							console.log(thrownError);
+						}
+					});
+				});
+			});
+		</script>
+	</head>
+	<body>
+		<div class="container">
+			<div class="header" id="navbar-header">
+				<nav class="navbar navbar-expand-lg navbar-light bg-light">
+					<a class="navbar-brand" href="#">Navbar</a>
+					<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+					  <span class="navbar-toggler-icon"></span>
+					</button>
+				  
+					<div class="collapse navbar-collapse" id="navbarSupportedContent">
+					  <ul class="navbar-nav mr-auto">
+						<li class="nav-item active">
+						  <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+						</li>
+						<li class="nav-item">
+						  <a class="nav-link" href="#">Link</a>
+						</li>
+						<li class="nav-item dropdown">
+						  <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+							Dropdown
+						  </a>
+						  <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+							<a class="dropdown-item" href="#">Action</a>
+							<a class="dropdown-item" href="#">Another action</a>
+							<div class="dropdown-divider"></div>
+							<a class="dropdown-item" href="#">Something else here</a>
+						  </div>
+						</li>
+						<li class="nav-item">
+						  <a class="nav-link disabled" href="#">Disabled</a>
+						</li>
+					  </ul>
+					  <form class="form-inline my-2 my-lg-0">
+						<input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+						<button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+					  </form>
+					</div>
+				</nav>
+			</div>
+			<div class="content col-xs-6">
+				<form>
+					<div class="form-group">
+						<label for="exampleInputEmail1">產品編號ID</label>
+						<input class="form-control" id="product_id" aria-describedby="emailHelp" placeholder="Enter Product ID">
+						<small id="emailHelp" class="form-text text-muted">請自動輸入</small>
+					</div>
+					<div class="form-group">
+						<label for="exampleInputPassword1">產品名稱</label>
+						<input class="form-control" id="product_name" placeholder="Product Name">
+					</div>
+					<div class="form-group">
+						<label for="exampleInputPassword1">產品細項ID</label>
+						<input class="form-control" id="product_detail_id" placeholder="Product detail ID">
+					</div>
+					<div class="form-group">
+						<label for="exampleInputPassword1">產品類別</label>
+						<input class="form-control" id="product_type" placeholder="Product Type">
+					</div>
+					<div class="form-group">
+						<label for="exampleInputPassword1">產品顏色ID</label>
+						<input class="form-control" id="product_color_id" placeholder="Product Color ID">
+					</div>
+					<div class="form-group">
+						<label for="exampleInputPassword1">產品顏色</label>
+						<input class="form-control" id="product_color" placeholder="Product Color">
+					</div>
+					<div class="form-group">
+						<label for="exampleInputPassword1">產品Size</label>
+						<input class="form-control" id="product_size" placeholder="Product Size">
+					</div>
+				</form>
+				<button id="product_post_submit" type="submit" class="btn btn-primary">Submit</button>
+			</div>
+		</div>
+	</body>  
+</html>

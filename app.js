@@ -1,8 +1,14 @@
+require('dotenv').config()
 var express = require('express');
 const bodyParser = require('body-parser');
 
 const swaggerUi = require('swagger-ui-express');
 const swaggerFile = require('./swagger_output.json')
+
+//產出加密功能Module
+const jwt_token = require('./models/jwt_token.js')
+// 額外加入驗證 Middleware
+const auth = require('./middleware/auth')
 
 // const YAML = require('yamljs')
 // const swaggerDocument = YAML.load('./swagger.yml')
@@ -49,17 +55,6 @@ app.use(bodyParser.urlencoded({extended: false}));
 
 //這是首頁
 app.get('/', function (req, res) {
-	//設計阻擋 SQL Injection 的部分
-
-
-	//get data test
-	//	connection.query('SELECT * FROM `product`', function(err, result, fields){
-	// 	if(err) throw err;
-	// 	console.log(result[0].title);
-	// });
-
-	// console.log( 'select ended!' );
-
 
 	res.send('Hello World');
 })
@@ -233,6 +228,9 @@ app.post('/api/v1/product',function(req, res){
 							throw err;
 							});
 						}
+
+						connection.end();
+
 						console.log('success!');
 						res.send("200_ok");
 					});
@@ -244,10 +242,206 @@ app.post('/api/v1/product',function(req, res){
 	//trans.execute();
 })
 
-app.get('/admin',(req, res)=>{
+app.get('/admin',auth,(req, res)=>{
 
 	//render .ejs static File
 	res.render('admin');
+})
+
+//log in & sign up mechanism
+//sign up
+app.post('/users/signup',(req, res)=>{
+
+	//prevent it from sql injection
+	const onlyLettersPattern = /^[A-Za-z]+$/;
+	if(
+		!req.body.email.match(onlyLettersPattern) ||
+		!req.body.password.match(onlyLettersPattern) ||
+		!req.body.name.match(onlyLettersPattern) ||
+		!req.body.phone.match(onlyLettersPattern) ||
+		!req.body.address.match(onlyLettersPattern)
+	){
+		return res.status(400).json({ err: "No special characters and no numbers, please!"})
+	}
+	else{
+		// 從 req.body 獲取用戶註冊資訊
+		var user_email = req.body.email;
+		var user_password = req.body.password;
+		var user_name = req.body.name;
+		var user_gender = req.body.gender;
+		var user_phone = req.body.phone;
+		var user_address = req.body.address;
+	}
+	
+	//Singly handling picture
+	var user_id=req.body.id;
+	var user_photo_url="test";
+
+	//handling password
+	var hashed_psw=jwt_token.encode_psw(user_password);
+
+	try{
+
+		//store in database (user table)
+		query = "insert into user values ('"+user_id+"','"+user_email+"','"+hashed_psw+"','False','2022-04-20','2022-04-20)";
+		query2 = "insert into user_detail ('user_id','name','gender','phone','address','photo_url') "+
+				"values ('"+user_id+"','"+user_name+"','"+user_gender+"','"+user_phone+"','"+user_address+"','"+user_photo_url+"')";
+		//query3 = "insert into user_login values ('"+product_color_id+"','"+product_id+"','"+product_color+"')";
+		
+		//use transaction insert into three tables
+		connection.beginTransaction(function(err) {
+			if (err) { throw err; }
+			connection.query(query, function (error, results, fields) {
+				if (error) {
+					return connection.rollback(function() {
+					throw error;
+					});
+				}
+		
+				connection.query(query2, function (error, results, fields) {
+					if (error) {
+						return connection.rollback(function() {
+							throw error;
+						});
+					}
+					
+					connection.commit(function(err) {
+						if (err) {
+							return connection.rollback(function() {
+							throw err;
+							});
+						}
+
+						connection.end();
+						
+						//if successfully store
+						res.status(201).send({ 
+							"status_code":'200',
+							"user_id": user_id,
+							"user_email":user_email,
+						});
+					});
+				});
+			});
+		});
+
+	}catch(err){
+
+		res.status(400).send(err);
+	}
+})
+
+//sign up check page
+app.get('/users/signup/verify',(req,res)=>{
+
+})
+
+//log in
+app.post('/users/login',(req, res)=>{
+
+	//先進行登入判斷
+	//prevent it from sql injection
+	const onlyLettersPattern = /^[A-Za-z]+$/;
+	if(
+		!req.body.email.match(onlyLettersPattern) ||
+		!req.body.password.match(onlyLettersPattern)
+	){
+		return res.status(400).json({ err: "No special characters and no numbers, please!"})
+	}
+	else{
+		// 從 req.body 獲取用戶註冊資訊
+		var user_email = req.body.email;
+		var user_password = req.body.password;
+	}
+
+	//encode the password
+	//var hashed_psw = jwt_token.encode_psw(user_password)
+
+	//check user information
+	const query="select * from user where email=?";
+	connection.query(query,[user_email], function(err, result){
+
+		if(err) throw err;
+
+		if(Object.keys(result[0]).length === 0){
+			throw new Error('Unable to login')
+		}
+		else{
+			const isMatch = await bcrypt.compare(user_password, result[0].password);
+		}
+	   	
+		// 驗證失敗時，丟出錯誤訊息
+		if (!isMatch) { throw new Error('Unable to login') }
+
+		// 驗證成功時，回傳該用戶完整資料
+		//先產出一個 jwt
+		var jwt = jwt_token.generate_token(result[0].id);
+
+		//儲存登入資料
+		query = "insert into user_login ('user_id','token','login_time') values ('"+result[0].id+"','"+jwt+"','2022-04-20')";
+
+		//use transaction insert into three tables
+		connection.beginTransaction(function(err) {
+			if (err) { throw err; }
+			connection.query(query, function (error, results, fields) {
+				if (error) {
+					return connection.rollback(function() {
+					throw error;
+					});
+				}
+		
+				connection.commit(function(err) {
+					if (err) {
+						return connection.rollback(function() {
+						throw err;
+						});
+					}
+
+					connection.end();
+					
+					//if successfully store
+					res.send({
+						"status":'200',
+						"user_id":user_id,
+						"jwt_token":jwt
+					});
+				});
+			});
+		});
+	});
+})
+
+//log out with one device
+app.post('/users/logout',auth,(req, res)=>{
+	
+	try {
+		// 篩選掉當前的 Token
+		var query = "delete token from user_login where token=?";
+
+		//刪除符合該token的用戶登陸資訊
+		connection.query(query,[req.token], function(err, result, fields){
+			if(err) throw err;
+			
+			res.status(200).send()
+		});	
+	} catch (err) {
+		res.status(500).send()
+	}
+})
+
+//log out with all devices (還不用做......)
+app.post('users/logoutAll',auth, (req, res) => {
+
+})
+
+//user profile
+app.get('users/profile',auth,(req, res)=>{
+
+	//取得 user_id
+	var user_id = req.user.id;
+
+	//
+	res.render('user_profile',req.user)
 })
 
 var server = app.listen(3000, function () {
