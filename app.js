@@ -430,18 +430,30 @@ app.post('/users/logout',auth,(req, res)=>{
 })
 
 //log out with all devices (還不用做......)
-app.post('users/logoutAll',auth, (req, res) => {
+app.post('/users/logoutAll',auth, (req, res) => {
 
 })
 
 //user profile
-app.get('users/profile',auth,(req, res)=>{
+app.get('/users/profile',auth,(req, res)=>{
 
 	//取得 user_id
 	var user_id = req.user.id;
 
 	//
-	res.render('user_profile',req.user)
+	res.render('user_profile',{
+		"user_id":req.user.id,
+		"name":req.user.name //以此類推......
+
+		//傳過去怎麼接?
+		//<script>var name = "<%= name %>";</script>
+		//console.log(name);
+	})
+})
+
+//Order checkout API
+app.post('/api/v1/order/checkout',(req,res)=>{
+	
 })
 
 var server = app.listen(3000, function () {
