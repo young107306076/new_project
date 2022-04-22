@@ -254,7 +254,7 @@ app.get('/admin',auth,(req, res)=>{
 
 //log in & sign up mechanism
 //sign up
-app.post('/users/signup',(req, res)=>{
+app.post('api/v1/users/signup',(req, res)=>{
 
 	console.log("ok")
 
@@ -339,12 +339,12 @@ app.post('/users/signup',(req, res)=>{
 })
 
 //sign up check page
-app.get('/users/signup/verify',(req,res)=>{
+app.get('api/v1/users/signup/verify',(req,res)=>{
 
 })
 
 //log in
-app.post('/users/login',(req, res)=>{
+app.post('api/v1/users/login',(req, res)=>{
 
 	console.log("hello")
 
@@ -421,7 +421,7 @@ app.post('/users/login',(req, res)=>{
 })
 
 //log out with one device
-app.post('/users/logout',auth,(req, res)=>{
+app.post('api/v1/users/logout',auth,(req, res)=>{
 	
 	try {
 		// 篩選掉當前的 Token
@@ -450,14 +450,15 @@ app.get('/users/profile',auth,(req, res)=>{
 	var user_id = req.user.id;
 
 	//
-	res.render('user_profile',{
-		"user_id":req.user.id,
-		"name":req.user.name //以此類推......
+	// res.render('user_profile',{
+	// 	"user_id":req.user.id,
+	// 	"name":req.user.name //以此類推......
 
-		//傳過去怎麼接?
-		//<script>var name = "<%= name %>";</script>
-		//console.log(name);
-	})
+	// 	//傳過去怎麼接?
+	// 	//<script>var name = "<%= name %>";</script>
+	// 	//console.log(name);
+	// })
+	res.render('user_profile');
 })
 
 //Order checkout API
