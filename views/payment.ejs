@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.13/semantic.min.css">
     <script src="https://code.jquery.com/jquery-1.10.1.min.js"></script>
     <script src="https://js.tappaysdk.com/tpdirect/v5.9.0"></script>
-    <title>Direct Pay - iframe</title>
+    <title>付款頁面</title>
     <script>
         TPDirect.setupSDK(12348, 'app_pa1pQcKoY22IlnSXq5m5WP5jFKzoRG58VEXpT7wU62ud7mMbDOGzCYIlzzLF', 'sandbox')
     </script>
@@ -37,7 +37,7 @@
     <div class="ui grid centered doubling stackable">
         <div class="six wide column">
             <div class="ui segment">
-                <h1 class="ui header">Direct Pay - iframe</h1>
+                <h1 class="ui header">付款頁面</h1>
 
                 <form class="ui form">
                     <div class="field">
@@ -82,11 +82,52 @@
             // var submitButton = document.querySelector('#submit')
             // var cardViewContainer = document.querySelector('#tappay-iframe')
 
-            // if (update.canGetPrime) {
-            //     submitButton.removeAttribute('disabled')
-            // } else {
-            //     submitButton.setAttribute('disabled', true)
-            // }
+            if (update.canGetPrime) {
+
+                //write jquery action
+                $(document).ready(function(){
+
+                    //提交卡片資訊，取得Prime碼
+                    $("#submit").click(function(){
+
+                        //取得Prime碼
+                        TPDirect.card.getPrime(function(result){
+                            if (result.status !== 0) {
+                                alert('get prime error ' + result.msg)
+                                return
+                            }
+                            else{
+                                console.log("success");
+                                //傳送ajax到後端order_api
+                                // $.ajax({
+                                //     type: "POST",
+                                //     url: "http://ec2-52-9-59-184.us-west-1.compute.amazonaws.com/api/v1/order/checkout",
+                                //     data:{
+                                //         prime:$("#product_id").val(),
+                                //         expense:$("#product_detail_id").val(),
+                                //         products:$("#product_color_id").val(),
+                                //         order_number:$("#product_name").val(),
+                                //         installment:$("#product_type").val(),
+                                //         currency:$("#product_color").val()
+                                //     },
+                                //     dataType: "json",
+                                //     success: function (response) {
+                                //         console.log(response);
+                                //         //取得後端response
+
+                                //     },
+                                //     error: function (thrownError) {
+                                //         console.log(thrownError);
+                                //     }
+                                // });
+                            }
+                        })
+                    });
+                });
+                
+            } else {
+                 submitButton.setAttribute('disabled', true)
+            }
 
             // var message = document.querySelector('#message')
 
@@ -106,9 +147,6 @@
             // }
             console.log(update);
         })
-        $(document).ready(function(){
-				
-		});
     </script>
 </body>
 
