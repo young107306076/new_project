@@ -1,22 +1,28 @@
+//need package setup
 require('dotenv').config()
 var express = require('express');
 const bodyParser = require('body-parser');
 
+//Swagger create API
 const swaggerUi = require('swagger-ui-express');
 const swaggerFile = require('./swagger_output.json')
 
 //產出加密功能Module
-const jwt_token = require('./models/jwt_token.js')
+const jwt_token = require('./models/encryption.js')
+
 // 額外加入驗證 Middleware
 const auth = require('./middleware/auth')
 
-// const YAML = require('yamljs')
-// const swaggerDocument = YAML.load('./swagger.yml')
-
 var app = express();
+
+//MySQL&Transaction Setup
 var mysql = require('mysql');
 var queues = require('mysql-queues');
 const DEBUG = true;
+
+//import childprocess to execute command line request
+const util = require('util')
+const exec = util.promisify(require('child_process').exec);
 
 app.use(
 	'/apidoc',
@@ -29,27 +35,25 @@ app.set('view engine', 'ejs');
 
 //Database Setting up
 var connection = mysql.createConnection({
- 	host: '127.0.0.1',
- 	user: 'root',
- 	password: 'young0709',
- 	database: 'stylist',
-	charset: 'UTF8_GENERAL_CI'
+  	host: '127.0.0.1',
+  	user: 'root',
+  	password: 'young0709',
+  	database: 'stylist',
+ 	charset: 'UTF8_GENERAL_CI'
 });
 
 
 
 // 建立連線後不論是否成功都會呼叫
 connection.connect(function(err){
- 	if(err) throw err;
-  	console.log('connect success!');
+  	if(err) throw err;
+   	console.log('connect success!');
 });
 
 //transaction的前置
 queues(connection, DEBUG);
 
 //使用bodyparser
-//app.use(bodyParser.urlencoded({ extended: true}))
-//app.use(require('connect').bodyParser());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 
@@ -252,6 +256,8 @@ app.get('/admin',auth,(req, res)=>{
 //sign up
 app.post('/users/signup',(req, res)=>{
 
+	console.log("ok")
+
 	//prevent it from sql injection
 	const onlyLettersPattern = /^[A-Za-z]+$/;
 	if(
@@ -312,6 +318,7 @@ app.post('/users/signup',(req, res)=>{
 							});
 						}
 
+						//close DB
 						connection.end();
 						
 						//if successfully store
@@ -338,6 +345,8 @@ app.get('/users/signup/verify',(req,res)=>{
 
 //log in
 app.post('/users/login',(req, res)=>{
+
+	console.log("hello")
 
 	//先進行登入判斷
 	//prevent it from sql injection
@@ -452,9 +461,105 @@ app.get('/users/profile',auth,(req, res)=>{
 })
 
 //Order checkout API
-app.post('/api/v1/order/checkout',(req,res)=>{
+app.post('/api/v1/order/checkout',async function(req,res){
+
+	//deal with params received from front-end
+	var prime=req.body.prime;
+	var expense=req.body.expense;
+	var products=req.body.products;
+	var order_number=req.body.order_number;
+	var installment=req.body.installment;
 	
+	//思考一下付款期限的資料從何而來?
+	//var delay_capture_in_days
+	//這個在思考一下要不要放入
+	//var card_info=req.body.card_info;
+
+	//將訂單資料存入資料庫
+	try{
+
+		//store in database (user table)
+		query = "insert into user values ('"+user_id+"','"+user_email+"','"+hashed_psw+"','True','2022-04-20','2022-04-20)";
+		query2 = "insert into user_detail ('user_id','name','gender','phone','address','photo_url') "+
+				"values ('"+user_id+"','"+user_name+"','"+user_gender+"','"+user_phone+"','"+user_address+"','"+user_photo_url+"')";
+		//query3 = "insert into user_login values ('"+product_color_id+"','"+product_id+"','"+product_color+"')";
+		
+		//use transaction insert into three tables
+		connection.beginTransaction(function(err) {
+			if (err) { throw err; }
+			connection.query(query, function (error, results, fields) {
+				if (error) {
+					return connection.rollback(function() {
+					throw error;
+					});
+				}
+		
+				connection.query(query2, function (error, results, fields) {
+					if (error) {
+						return connection.rollback(function() {
+							throw error;
+						});
+					}
+					
+					connection.commit(function(err) {
+						if (err) {
+							return connection.rollback(function() {
+							throw err;
+							});
+						}
+
+						//close DB
+						connection.end();
+						
+						//if successfully store
+						res.status(201).send({ 
+							"status_code":'200',
+							"user_id": user_id,
+							"user_email":user_email,
+						});
+					});
+				});
+			});
+		});
+	}catch(err){
+
+	}
+
+	//send request with command line
+	//透過 curl 指令走訪 url 指定網址
+	let {stdout, stderr} = await exec(
+		`curl ` + 
+		`-X GET ${url} ` +
+		`-L ` + 
+		`-H "User-Agent: ${headers['User-Agent']}" ` + 
+		`-H "Accept-Language: ${headers['Accept-Language']}" ` + 
+		`-H "Accept: ${headers['Accept']}" ` + 
+		`-H "Cookie: ${headers['Cookie']}" `);
+	
+	
+	//若銀行端顯示付款成功，則將該筆訂單的付款欄位改為True
+	//並新增一筆付款成功的訂單 (這有必要???)
+	let outcome=stdout.status;
+	if(outcome=="0"){
+		res.send({
+			"status":outcome,
+			"auth_code":stdout.auth_code,
+			"bank_result_code":stdout.bank_result_code,
+			"bank_result_msg":stdout.bank_result_msg
+		});
+	}	
 })
+
+//payment_page
+app.get('/admin/checkout',(req, res)=>{
+	res.render('payment')
+})
+
+//payment_success_page
+app.get('/admin/checkout/success',(req ,res)=>{
+
+})
+
 
 var server = app.listen(3000, function () {
 	var host = server.address().address

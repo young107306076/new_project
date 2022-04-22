@@ -3,7 +3,7 @@ var mysql = require('mysql');
 
 //Database Setting up
 var connection = mysql.createConnection({
-	host: '127.0.0.1',
+	host: '52.9.59.184',
 	user: 'root',
 	password: 'young0709',
 	database: 'stylist',
