@@ -367,7 +367,7 @@ app.post('/users/login',(req, res)=>{
 			throw new Error('Unable to login')
 		}
 		else{
-			const isMatch = await bcrypt.compare(user_password, result[0].password);
+			const isMatch = bcrypt.compare(user_password, result[0].password);
 		}
 	   	
 		// 驗證失敗時，丟出錯誤訊息
