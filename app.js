@@ -552,7 +552,7 @@ app.post('/api/v1/order/checkout',async function(req,res){
 
 //payment_page
 app.get('/admin/checkout',(req, res)=>{
-	res.render('payment')
+	res.render('payment');
 })
 
 //payment_success_page
