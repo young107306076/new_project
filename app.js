@@ -386,7 +386,7 @@ app.post('/api/v1/users/login',(req, res)=>{
 
 	//check user information
 	const query="select * from user where email=?";
-	connection.query(query,[user_email], function(err, result){
+	connection.query(query,[user_email], async function(err, result){
 
 		if(err) throw err;
 
