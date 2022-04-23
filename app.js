@@ -365,17 +365,17 @@ app.post('/api/v1/users/login',(req, res)=>{
 	//先進行登入判斷
 	//prevent it from sql injection
 	const onlyLettersPattern = /^[A-Za-z]+$/;
-	if(
-		!req.body.email.match(onlyLettersPattern) ||
-		!req.body.password.match(onlyLettersPattern)
-	){
-		return res.status(400).json({ err: "No special characters and no numbers, please!"})
-	}
-	else{
+	//if(
+		//req.body.email.match(onlyLettersPattern) ||
+		//req.body.password.match(onlyLettersPattern)
+	//){
+		//return res.status(400).json({ err: "No special characters and no numbers, please!"})
+	//}
+	//else{
 		// 從 req.body 獲取用戶註冊資訊
-		var user_email = req.body.email;
-		var user_password = req.body.password;
-	}
+	var user_email = req.query.email;
+	var user_password = req.query.password;
+	//}
 
 	console.log(user_password)
 
