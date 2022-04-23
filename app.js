@@ -283,7 +283,7 @@ app.post('/api/v1/users/signup',(req, res)=>{
 	//}
 	
 	//Singly handling picture
-	var user_id=req.body.id;
+	var user_id=req.query.id;
 	var user_photo_url="test";
 
 	//handling password
