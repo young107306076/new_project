@@ -9,6 +9,7 @@ const swaggerFile = require('./swagger_output.json')
 
 //產出加密功能Module
 const jwt_token = require('./models/encryption.js')
+const bcrypt = require('bcrypt')
 
 // 額外加入驗證 Middleware
 const auth = require('./middleware/auth')
@@ -393,7 +394,7 @@ app.post('/api/v1/users/login',(req, res)=>{
 			throw new Error('Unable to login')
 		}
 		else{
-			isMatch = jwt_token.compare(user_password, result[0].password);
+			const isMatch = bcrypt.compare(user_password, result[0].password);
 		}
 	   	
 		// 驗證失敗時，丟出錯誤訊息
