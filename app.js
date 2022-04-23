@@ -348,7 +348,7 @@ app.get('/api/v1/users/signup/verify',(req,res)=>{
 })
 
 //unit test
-app.get('/api/v1/user/test',(req, res)=>{
+app.post('/api/v1/user/test',(req, res)=>{
 
 	var jwt = jwt_token.generate_token("test");
 
