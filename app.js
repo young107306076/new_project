@@ -343,10 +343,15 @@ app.get('api/v1/users/signup/verify',(req,res)=>{
 
 })
 
+//unit test
+app.get('api/v1/user/test',(req, res)=>{
+
+	var jwt = jwt_token.generate_token("test");
+	console.log(jwt)
+})
+
 //log in
 app.post('api/v1/users/login',(req, res)=>{
-
-	console.log("hello")
 
 	//先進行登入判斷
 	//prevent it from sql injection
@@ -362,6 +367,8 @@ app.post('api/v1/users/login',(req, res)=>{
 		var user_email = req.body.email;
 		var user_password = req.body.password;
 	}
+
+	console.log(user_password)
 
 	//encode the password
 	//var hashed_psw = jwt_token.encode_psw(user_password)

@@ -10,7 +10,29 @@
 		<script>
 			//$("#navbar-header").load("./navbar.ejs");
 			$(document).ready(function(){
-				
+				$("#submit").click(function(){
+					
+					//get jwt from back-end when user is loggin in
+					$.ajax({
+						url: 'http://ec2-52-9-59-184.us-west-1.compute.amazonaws.com/api/v1/users/login',
+						type: 'post',
+						contentType: 'json',
+						headers: { Authorization: "bearer " + localStorage.getItem("token") },
+						data: {
+							email:"email",
+							password:"password"
+						},
+						dataType:'json',
+						success: function(data){
+							const dT  = localStorage.setItem("bearer", data.token);
+							console.log(dT)
+							alert(data.message);
+						},
+						error: function (XHR, status, err){
+							alert(XHR)
+						}
+					});
+				});
 			});
 		</script>
 	</head>
