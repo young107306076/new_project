@@ -20,6 +20,13 @@ const generate_jwt_token = (user_id)=>{
 	return token
 }
 
+const compare = (psw1, psw2)=>{
+
+	var isMatch = bcrypt.compare(psw1,psw2)
+
+	return isMatch
+}
+
 module.exports={
 	'generate_token':generate_jwt_token,
 	'encode_psw': encode_password
