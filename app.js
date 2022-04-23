@@ -361,7 +361,7 @@ app.get('/api/v1/user/test',(req, res)=>{
 })
 
 //log in
-app.post('/api/v1/users/login',(req, res)=>{
+app.post('/api/v1/users/login',async function(req, res){
 
 	//先進行登入判斷
 	//prevent it from sql injection
