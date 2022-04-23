@@ -262,27 +262,25 @@ app.get('/admin',auth,(req, res)=>{
 //sign up
 app.post('/api/v1/users/signup',(req, res)=>{
 
-	console.log("ok")
-
 	//prevent it from sql injection
 	const onlyLettersPattern = /^[A-Za-z]+$/;
 	if(
-		!req.body.email.match(onlyLettersPattern) ||
-		!req.body.password.match(onlyLettersPattern) ||
-		!req.body.name.match(onlyLettersPattern) ||
-		!req.body.phone.match(onlyLettersPattern) ||
-		!req.body.address.match(onlyLettersPattern)
+		!req.query.email.match(onlyLettersPattern) ||
+		!req.query.password.match(onlyLettersPattern) ||
+		!req.query.name.match(onlyLettersPattern) ||
+		!req.query.phone.match(onlyLettersPattern) ||
+		!req.query.address.match(onlyLettersPattern)
 	){
 		return res.status(400).json({ err: "No special characters and no numbers, please!"})
 	}
 	else{
 		// 從 req.body 獲取用戶註冊資訊
-		var user_email = req.body.email;
-		var user_password = req.body.password;
-		var user_name = req.body.name;
-		var user_gender = req.body.gender;
-		var user_phone = req.body.phone;
-		var user_address = req.body.address;
+		var user_email = req.query.email;
+		var user_password = req.query.password;
+		var user_name = req.query.name;
+		var user_gender = req.query.gender;
+		var user_phone = req.query.phone;
+		var user_address = req.query.address;
 	}
 	
 	//Singly handling picture
