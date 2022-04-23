@@ -14,7 +14,7 @@
 					
 					//get jwt from back-end when user is loggin in
 					$.ajax({
-						url: 'http://ec2-52-9-59-184.us-west-1.compute.amazonaws.com/api/v1/users/login',
+						url: 'http://ec2-52-9-59-184.us-west-1.compute.amazonaws.com/api/v1/user/test',
 						type: 'post',
 						contentType: 'json',
 						headers: { Authorization: "bearer " + localStorage.getItem("token") },
