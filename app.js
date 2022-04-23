@@ -392,7 +392,7 @@ app.post('/api/v1/users/login',(req, res)=>{
 			throw new Error('Unable to login')
 		}
 		else{
-			const isMatch = jwt_token.compare(user_password, result[0].password);
+			var isMatch = jwt_token.compare(user_password, result[0].password);
 		}
 	   	
 		// 驗證失敗時，丟出錯誤訊息
