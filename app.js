@@ -379,8 +379,6 @@ app.post('/api/v1/users/login',async function(req, res){
 	
 	//}
 
-	console.log(user_password)
-
 	//encode the password
 	//var hashed_psw = jwt_token.encode_psw(user_password)
 
@@ -394,6 +392,7 @@ app.post('/api/v1/users/login',async function(req, res){
 			throw new Error('Unable to find result')
 		}
 		else{
+			console.log(result[0])
 			const isMatch = await bcrypt.compare(user_password, result[0].password);
 			
 			// 驗證失敗時，丟出錯誤訊息
