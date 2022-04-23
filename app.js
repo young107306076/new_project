@@ -395,46 +395,46 @@ app.post('/api/v1/users/login',(req, res)=>{
 		}
 		else{
 			const isMatch = bcrypt.compare(user_password, result[0].password);
-		}
-	   	
-		// 驗證失敗時，丟出錯誤訊息
-		if (!isMatch) { throw new Error('Unable to login') }
+			console.log(isMatch)
+			// 驗證失敗時，丟出錯誤訊息
+			if (!isMatch) { throw new Error('Unable to login') }
 
-		// 驗證成功時，回傳該用戶完整資料
-		//先產出一個 jwt
-		var jwt = jwt_token.generate_token(result[0].id);
+			// 驗證成功時，回傳該用戶完整資料
+			//先產出一個 jwt
+			var jwt = jwt_token.generate_token(result[0].id);
 
-		//儲存登入資料
-		query = "insert into user_login ('user_id','token','login_time') values ('"+result[0].id+"','"+jwt+"','2022-04-20')";
+			//儲存登入資料
+			query = "insert into user_login ('user_id','token','login_time') values ('"+result[0].id+"','"+jwt+"','2022-04-20')";
 
-		//use transaction insert into three tables
-		connection.beginTransaction(function(err) {
-			if (err) { throw err; }
-			connection.query(query, function (error, results, fields) {
-				if (error) {
-					return connection.rollback(function() {
-					throw error;
-					});
-				}
-		
-				connection.commit(function(err) {
-					if (err) {
+			//use transaction insert into three tables
+			connection.beginTransaction(function(err) {
+				if (err) { throw err; }
+				connection.query(query, function (error, results, fields) {
+					if (error) {
 						return connection.rollback(function() {
-						throw err;
+						throw error;
 						});
 					}
+			
+					connection.commit(function(err) {
+						if (err) {
+							return connection.rollback(function() {
+							throw err;
+							});
+						}
 
-					connection.end();
-					
-					//if successfully store
-					res.send({
-						"status":'200',
-						"user_id":user_id,
-						"jwt_token":jwt
+						connection.end();
+						
+						//if successfully store
+						res.send({
+							"status":'200',
+							"user_id":user_id,
+							"jwt_token":jwt
+						});
 					});
 				});
 			});
-		});
+		}
 	});
 })
 
