@@ -29,5 +29,6 @@ const compare = (psw1, psw2)=>{
 
 module.exports={
 	'generate_token':generate_jwt_token,
-	'encode_psw': encode_password
+	'encode_psw': encode_password,
+	'compare': compare
 }
