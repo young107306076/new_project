@@ -24,9 +24,9 @@
 						},
 						dataType:'json',
 						success: function(data){
-							const dT  = localStorage.setItem("bearer", data.token);
+							const dT  = localStorage.setItem("bearer", data.jwt);
 							console.log(dT)
-							alert(data.message);
+							alert(data.jwt);
 						},
 						error: function (XHR, status, err){
 							alert(XHR)
