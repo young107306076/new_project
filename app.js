@@ -391,7 +391,7 @@ app.post('/api/v1/users/login',async function(req, res){
 		if(err) throw err;
 
 		if(Object.keys(result[0]).length === 0){
-			throw new Error('Unable to login')
+			throw new Error('Unable to find result')
 		}
 		else{
 			const isMatch = await bcrypt.compare(user_password, result[0].password);
