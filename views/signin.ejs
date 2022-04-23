@@ -25,11 +25,11 @@
 						dataType:'json',
 						success: function(data){
 							const dT  = localStorage.setItem("bearer", data.jwt);
-							console.log(dT)
+							console.log(dT);
 							alert(data.jwt);
 						},
 						error: function (XHR, status, err){
-							alert(XHR)
+							alert(XHR);
 						}
 					});
 				});
@@ -38,7 +38,7 @@
 	</head>
 	<body>
 		<div class="container">
-			<%- include navbar.ejs %>
+			
 			<div class="content col-xs-6">
 				<form>
 					<div class="form-group">
@@ -71,7 +71,7 @@
 						<input class="form-control" id="product_size" placeholder="Product Size">
 					</div>
 				</form>
-				<button id="product_post_submit" type="submit" class="btn btn-primary">Submit</button>
+				<button id="submit" type="submit" class="btn btn-primary">Submit</button>
 			</div>
 		</div>
 	</body>  
