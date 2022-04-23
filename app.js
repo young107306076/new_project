@@ -292,7 +292,7 @@ app.post('/api/v1/users/signup',(req, res)=>{
 	try{
 
 		//store in database (user table)
-		query = "insert into user values ('"+user_id+"','"+user_email+"','"+hashed_psw+"','True','2022-04-20','2022-04-20)";
+		query = "insert into user values ('"+user_id+"','"+user_email+"','"+hashed_psw+"','True','2022-04-20','2022-04-20')";
 		query2 = "insert into user_detail ('user_id','name','gender','phone','address','photo_url') "+
 				"values ('"+user_id+"','"+user_name+"','"+user_gender+"','"+user_phone+"','"+user_address+"','"+user_photo_url+"')";
 		//query3 = "insert into user_login values ('"+product_color_id+"','"+product_id+"','"+product_color+"')";
