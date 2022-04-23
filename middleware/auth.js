@@ -25,7 +25,7 @@ module.exports = async (req, res, next) => {
 		// 從來自客戶端請求的 header 取得和擷取 JWT
 		const token = req.header('Authorization').replace('Bearer ', '')
 		// 驗證 Token
-		const decoded = jwt.verify(token, process.env.SECRET)
+		//const decoded = jwt.verify(token, process.env.SECRET)
 
 		//set up query
 		//var query = 'select * from user_login where user_id=? and token=?';
