@@ -346,13 +346,14 @@ app.get('api/v1/users/signup/verify',(req,res)=>{
 //unit test
 app.get('api/v1/user/test',(req, res)=>{
 
-	var jwt = jwt_token.generate_token("test");
+	// var jwt = jwt_token.generate_token("test");
 
-	console.log(jwt);
+	// console.log(jwt);
 
-	res.send({
-		"jwt":jwt
-	})
+	// res.send({
+	// 	"jwt":jwt
+	// })
+	res.send("test");
 })
 
 //log in
