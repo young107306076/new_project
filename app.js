@@ -265,7 +265,6 @@ app.post('/api/v1/users/signup',(req, res)=>{
 	//prevent it from sql injection
 	const onlyLettersPattern = /^[A-Za-z]+$/;
 	if(
-		!req.query.email.match(onlyLettersPattern) ||
 		!req.query.password.match(onlyLettersPattern) ||
 		!req.query.name.match(onlyLettersPattern) ||
 		!req.query.phone.match(onlyLettersPattern) ||
