@@ -364,7 +364,7 @@ app.post('/api/v1/users/login',(req, res)=>{
 
 	//先進行登入判斷
 	//prevent it from sql injection
-	const onlyLettersPattern = /^[A-Za-z]+$/;
+	//const onlyLettersPattern = /^[A-Za-z]+$/;
 	//if(
 		//req.body.email.match(onlyLettersPattern) ||
 		//req.body.password.match(onlyLettersPattern)
@@ -375,6 +375,7 @@ app.post('/api/v1/users/login',(req, res)=>{
 		// 從 req.body 獲取用戶註冊資訊
 	var user_email = req.query.email;
 	var user_password = req.query.password;
+	
 	//}
 
 	console.log(user_password)
@@ -392,7 +393,7 @@ app.post('/api/v1/users/login',(req, res)=>{
 			throw new Error('Unable to login')
 		}
 		else{
-			var isMatch = jwt_token.compare(user_password, result[0].password);
+			isMatch = jwt_token.compare(user_password, result[0].password);
 		}
 	   	
 		// 驗證失敗時，丟出錯誤訊息

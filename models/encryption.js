@@ -22,7 +22,7 @@ const generate_jwt_token = (user_id)=>{
 
 const compare = (psw1, psw2)=>{
 
-	var isMatch = bcrypt.compare(psw1,psw2)
+	const isMatch = bcrypt.compare(psw1,psw2)
 
 	return isMatch
 }
