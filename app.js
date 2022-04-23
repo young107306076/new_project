@@ -359,6 +359,12 @@ app.post('/api/v1/user/test',(req, res)=>{
 	})
 })
 
+//log in page
+app.get('/user/login',(req, res)=>{
+
+	res.render('signin')
+})
+
 //log in
 app.post('/api/v1/users/login',async function(req, res){
 
