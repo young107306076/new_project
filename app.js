@@ -60,13 +60,14 @@ app.use(bodyParser.urlencoded({extended: false}));
 //這是首頁
 app.get('/', function (req, res) {
 
-	var jwt = jwt_token.generate_token("test");
+	//var jwt = jwt_token.generate_token("test");
 
-	console.log(jwt);
+	//console.log(jwt);
 
 	// res.send({
 	// 	"jwt":jwt
 	// })
+	console.log(process.env.SECRET);
 })
 
 //設計API
