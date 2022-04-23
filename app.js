@@ -260,7 +260,7 @@ app.get('/admin',auth,(req, res)=>{
 
 //log in & sign up mechanism
 //sign up
-app.post('api/v1/users/signup',(req, res)=>{
+app.post('/api/v1/users/signup',(req, res)=>{
 
 	console.log("ok")
 
@@ -345,12 +345,12 @@ app.post('api/v1/users/signup',(req, res)=>{
 })
 
 //sign up check page
-app.get('api/v1/users/signup/verify',(req,res)=>{
+app.get('/api/v1/users/signup/verify',(req,res)=>{
 
 })
 
 //unit test
-app.get('api/v1/user/test',(req, res)=>{
+app.get('/api/v1/user/test',(req, res)=>{
 
 	// var jwt = jwt_token.generate_token("test");
 
@@ -363,7 +363,7 @@ app.get('api/v1/user/test',(req, res)=>{
 })
 
 //log in
-app.post('api/v1/users/login',(req, res)=>{
+app.post('/api/v1/users/login',(req, res)=>{
 
 	//先進行登入判斷
 	//prevent it from sql injection
@@ -440,7 +440,7 @@ app.post('api/v1/users/login',(req, res)=>{
 })
 
 //log out with one device
-app.post('api/v1/users/logout',auth,(req, res)=>{
+app.post('/api/v1/users/logout',auth,(req, res)=>{
 	
 	try {
 		// 篩選掉當前的 Token
