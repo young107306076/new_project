@@ -28,19 +28,21 @@ module.exports = async (req, res, next) => {
 		const decoded = jwt.verify(token, process.env.SECRET)
 
 		//set up query
-		var query = 'select * from user_login where user_id=? and token=?';
+		//var query = 'select * from user_login where user_id=? and token=?';
 
 		//找尋符合此 token 的使用者資料
-		connection.query(query,[decoded._id,token], function(err, result, fields){
-			if(err) throw err;
+		// connection.query(query,[decoded._id,token], function(err, result, fields){
+		// 	if(err) throw err;
 			
-			// 將 token 存到 req.token 上供後續使用
-			req.token=token
-			// 將 user 存到 req.user 上供後續使用
-			req.user=result[0]
+		// 	// 將 token 存到 req.token 上供後續使用
+		// 	req.token=token
+		// 	// 將 user 存到 req.user 上供後續使用
+		// 	req.user=result[0]
 
-			next()
-		});	
+		// 	next()
+		// });	
+		console.log(token)
+		next()
 	} catch (err) {
 
 		res.status(401).send({ error: 'Please authenticate.' })
