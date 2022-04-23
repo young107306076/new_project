@@ -44,7 +44,7 @@ module.exports = async (req, res, next) => {
 		console.log(token)
 		next()
 	} catch (err) {
-
+		console.error(err)
 		res.status(401).send({ error: 'Please authenticate.' })
 	}
 
