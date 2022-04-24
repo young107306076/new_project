@@ -371,7 +371,7 @@ app.post('/api/v1/user/test',async function(req, res){
 
 	var data = `{
 		"partner_key": "partner_6ID1DoDlaPrfHw6HBZsULfTYtDmWs0q0ZZGKMBpp4YICWBxgK97eK3RM",
-		"prime": "8f4691c9b25ca90ce2817cdbdee8de12f28440698e014d21defe88c3e0e52820",
+		"prime": "a88f10eec10254efd45f323eec78da006504ad3fad4c3af5ed7976ab3813a519",
 		"amount": "1",
 		"merchant_id": "GlobalTesting_CTBC",
 		"details": "Some item",
