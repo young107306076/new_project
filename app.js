@@ -351,41 +351,29 @@ app.get('/api/v1/users/signup/verify',async function(req,res){
 //unit test
 app.post('/api/v1/user/test',async function(req, res){
 
-	var url = "https://sandbox.tappaysdk.com/tpc/payment/pay-by-prime";
+	password="test"
 
-	var xhr = new XMLHttpRequest();
-	xhr.open("POST", url);
+	const query="select * from user where email=?";
+	connection.query(query,[user_email], async function(err, result){
 
-	xhr.setRequestHeader("content-type", "application/json");
-	xhr.setRequestHeader("x-api-key", "partner_6ID1DoDlaPrfHw6HBZsULfTYtDmWs0q0ZZGKMBpp4YICWBxgK97eK3RM");
+		if(err) throw err;
 
-	xhr.onreadystatechange = function () {
-	if (xhr.readyState === 4) {
-		//console.log(xhr.status);
-		console.log(xhr.responseText);
-		res.send({
-			"status":xhr.status,
-			"response":xhr.responseText
-		})
-	}};
-
-	var data = `{
-		"partner_key": "partner_6ID1DoDlaPrfHw6HBZsULfTYtDmWs0q0ZZGKMBpp4YICWBxgK97eK3RM",
-		"prime": "a88f10eec10254efd45f323eec78da006504ad3fad4c3af5ed7976ab3813a519",
-		"amount": "1",
-		"merchant_id": "GlobalTesting_CTBC",
-		"details": "Some item",
-		"cardholder": {
-			"phone_number": "+886923456789",
-			"name": "王小明",
-			"email": "LittleMing@Wang.com",
-			"zip_code": "100",
-			"address": "台北市天龍區芝麻街1號1樓",
-			"national_id": "A123456789"
+		if(Object.keys(result[0]).length === 0){
+			throw new Error('Unable to find result')
 		}
-	}`;
+		else{
+			console.log(result[0])
+			bcrypt.compare(password, result[0].password, function(err, result) {
+				// result == true
+			});
+			
 
-	xhr.send(data);
+			// 驗證成功時，回傳該用戶完整資料
+			//先產出一個 jwt
+			var id = result[0].id
+			var jwt=jwt_token.generate_token(id);
+		}
+	});
 })
 
 //log in page
@@ -426,7 +414,7 @@ app.post('/api/v1/users/login',async function(req, res){
 			throw new Error('Unable to find result')
 		}
 		else{
-			console.log(result[0])
+			
 
 			//要解決密碼不一致的問題
 			const isMatch = await bcrypt.compare(user_password, result[0].password);
