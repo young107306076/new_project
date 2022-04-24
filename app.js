@@ -601,7 +601,7 @@ app.post('/api/v1/order/checkout',async function(req,res){
 		let outcome = jsonResponse.status
 		if(outcome=="0"){
 
-			res.send({
+			res.json({
 				"status":outcome,
 				"auth_code":jsonResponse.auth_code,
 				"bank_result_code":jsonResponse.bank_result_code,
