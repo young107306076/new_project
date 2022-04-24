@@ -615,6 +615,11 @@ app.post('/api/v1/order/checkout',async function(req,res){
 				"bank_result_msg":xhr.responseText.bank_result_msg
 			});
 		}
+		else{
+			res.send({
+				"status":outcome
+			})
+		}
 	}};
 
 	var data = `{
