@@ -598,7 +598,7 @@ app.post('/api/v1/order/checkout',async function(req,res){
 	xhr.open("POST", url);
 
 	xhr.setRequestHeader("content-type", "application/json");
-	xhr.setRequestHeader("x-api-key", "partner_6ID1DoDlaPrfHw6HBZsULfTYtDmWs0q0ZZGKMBpp4YICWBxgK97eK3RM");
+	xhr.setRequestHeader("x-api-key", "partner_PHgswvYEk4QY6oy3n8X3CwiQCVQmv91ZcFoD5VrkGFXo8N7BFiLUxzeG");
 
 	xhr.onreadystatechange = function () {
 	if (xhr.readyState === 4) {
@@ -607,7 +607,7 @@ app.post('/api/v1/order/checkout',async function(req,res){
 		//若銀行端顯示付款成功，則將該筆訂單的付款欄位改為True
 		//並新增一筆付款成功的訂單 (這有必要???)
 		let outcome=xhr.responseText.status;
-		console.log(xhr)
+		console.log(xhr.responseText)
 		if(outcome=="0"){
 			res.send({
 				"status":outcome,
@@ -625,7 +625,7 @@ app.post('/api/v1/order/checkout',async function(req,res){
 	}};
 
 	var data = `{
-		"partner_key": "partner_6ID1DoDlaPrfHw6HBZsULfTYtDmWs0q0ZZGKMBpp4YICWBxgK97eK3RM",
+		"partner_key": "partner_PHgswvYEk4QY6oy3n8X3CwiQCVQmv91ZcFoD5VrkGFXo8N7BFiLUxzeG",
 		"prime": "${prime}",
 		"amount": "1",
 		"merchant_id": "GlobalTesting_CTBC",
