@@ -359,8 +359,9 @@ app.post('/api/v1/user/test',async function(req, res){
 		`-L ` +
 		`-H "Content-Type: application/json" `+
 		`-H "x-api-key: ${process.env.partner_key} " `+
-		`-d '{"prime":${prime},
-			"partnet_key":${process.env.partner_key},
+		`-d '{
+			"prime":${prime},
+			"partnet_key":"${process.env.partner_key}",
 			"merchant_id":${merchant_id},
 			"details":"TapPay Test",
 			"amount":100,
