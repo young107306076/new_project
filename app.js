@@ -628,7 +628,7 @@ app.post('/api/v1/order/checkout',async function(req,res){
 		"partner_key": "partner_PHgswvYEk4QY6oy3n8X3CwiQCVQmv91ZcFoD5VrkGFXo8N7BFiLUxzeG",
 		"prime": "${prime}",
 		"amount": "1",
-		"merchant_id": "GlobalTesting_CTBC",
+		"merchant_id": "${merchant_id}",
 		"details": "Some item",
 		"cardholder": {
 			"phone_number": "+886923456789",
