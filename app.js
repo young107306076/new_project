@@ -382,7 +382,7 @@ app.post('/api/v1/user/test',async function(req, res){
 	}`;
 
 	var status=xhr.send(data);
-	console.log(status)
+	console.log(status+"hi")
 })
 
 //log in page
