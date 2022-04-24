@@ -407,7 +407,7 @@ app.post('/api/v1/users/login',async function(req, res){
 
 			// 驗證成功時，回傳該用戶完整資料
 			//先產出一個 jwt
-			jwt_test = jwt_token.generate_token(result[0].id);
+			var jwt_test = jwt_token.generate_token(result[0].id);
 
 			//儲存登入資料
 			query = "insert into user_login ('user_id','token','login_time') values ('"+result[0].id+"','"+jwt_test+"','2022-04-20')";
