@@ -351,9 +351,9 @@ app.get('/api/v1/users/signup/verify',async function(req,res){
 //unit test
 app.post('/api/v1/user/test',async function(req, res){
 
-	var password="test"
+	var password="test";
 	var hashed_psw=jwt_token.encode_psw(password);
-
+	console.log(hashed_psw);
 	bcrypt.compare(password, hashed_psw, function(err, result) {
 		// result == true
 		console.log(result)
