@@ -343,7 +343,7 @@ app.post('/api/v1/users/signup',(req, res)=>{
 })
 
 //sign up check page
-app.get('/api/v1/users/signup/verify',(req,res)=>{
+app.get('/api/v1/users/signup/verify',async function(req,res){
 
 })
 
