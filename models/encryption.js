@@ -14,7 +14,7 @@ const encode_password = (password)=>{
 const generate_jwt_token = (user_id)=>{
 
 	// 產生一組 JWT
-	var token = jwt.sign({ id: user_id }, process.env.SECRET, { expiresIn: '3 day' })
+	const token = jwt.sign({ id: user_id }, process.env.SECRET, { expiresIn: '3 day' })
 	
 	// 回傳 JWT
 	return token

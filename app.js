@@ -397,6 +397,7 @@ app.post('/api/v1/users/login',async function(req, res){
 			throw new Error('Unable to find result')
 		}
 		else{
+			console.log(result[0])
 
 			//要解決密碼不一致的問題
 			const isMatch = await bcrypt.compare(user_password, result[0].password);
