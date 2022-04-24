@@ -359,7 +359,7 @@ app.post('/api/v1/user/test',async function(req, res){
 		`-X POST https://sandbox.tappaysdk.com/tpc/payment/pay-by-prime \ ` +
 		`-H 'content-type: application/json' \ `+
 		`-H 'x-api-key: ${process.env.partner_key}' \ `+
-		`-d '{
+		`-d '\ {
 			"partnet_key":"${process.env.partner_key}",
 			"prime":${prime},
 			"merchant_id":${merchant_id},
