@@ -351,29 +351,12 @@ app.get('/api/v1/users/signup/verify',async function(req,res){
 //unit test
 app.post('/api/v1/user/test',async function(req, res){
 
-	password="test"
-	user_email="young30310@gmail.com"
-	const query="select * from user where email=?";
-	connection.query(query,[user_email], async function(err, result){
+	var password="test"
+	var hashed_psw=jwt_token.encode_psw(password);
 
-		if(err) throw err;
-
-		if(Object.keys(result[0]).length === 0){
-			throw new Error('Unable to find result')
-		}
-		else{
-			console.log(result[0])
-			bcrypt.compare(password, result[0].password, function(err, result) {
-				// result == true
-				console.log(result)
-			});
-			
-
-			// 驗證成功時，回傳該用戶完整資料
-			//先產出一個 jwt
-			var id = result[0].id
-			var jwt=jwt_token.generate_token(id);
-		}
+	bcrypt.compare(password, hashed_psw, function(err, result) {
+		// result == true
+		console.log(result)
 	});
 })
 
