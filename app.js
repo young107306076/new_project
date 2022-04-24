@@ -435,7 +435,7 @@ app.post('/api/v1/users/login',async function(req, res){
 						//if successfully store
 						res.send({
 							"status":'200',
-							"user_id":user_id,
+							"user_id":id,
 							"jwt_token":jwt
 						});
 					});
