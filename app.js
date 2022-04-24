@@ -350,14 +350,14 @@ app.get('/api/v1/users/signup/verify',async function(req,res){
 //unit test
 app.post('/api/v1/user/test',async function(req, res){
 
-	var prime = "b73b28fd93c70d73b5ad619167b705e2a4250edb9ebb122ef45f822490b60935";
+	var prime = "853a0a15fd3514f912cede0fb52939e0f3b7766a9aac6d507fc08c953316f41f";
 	var merchant_id="AppWorksSchool_CTBC";
 
 
 	let {stdout, stderr} = await exec(
 		`curl ` + 
 		`-X POST https://sandbox.tappaysdk.com/tpc/payment/pay-by-prime \ ` +
-		`-H 'Content-Type: application/json' \ `+
+		`-H 'content-type: application/json' \ `+
 		`-H 'x-api-key: ${process.env.partner_key}' \ `+
 		`-d '{
 			"partnet_key":"${process.env.partner_key}",
