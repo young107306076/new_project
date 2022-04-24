@@ -361,8 +361,8 @@ app.post('/api/v1/user/test',async function(req, res){
 
 	xhr.onreadystatechange = function () {
 	if (xhr.readyState === 4) {
-		console.log(xhr.status);
-		console.log(xhr.responseText);
+		//console.log(xhr.status);
+		//console.log(xhr.responseText);
 	}};
 
 	var data = `{
@@ -381,8 +381,7 @@ app.post('/api/v1/user/test',async function(req, res){
 		}
 	}`;
 
-	var status=xhr.send(data);
-	console.log(status+"hi")
+	xhr.send(data);
 })
 
 //log in page
