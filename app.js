@@ -605,7 +605,10 @@ app.post('/api/v1/order/checkout',async function(req,res){
 		//若銀行端顯示付款成功，則將該筆訂單的付款欄位改為True
 		//並新增一筆付款成功的訂單 (這有必要???)
 		let outcome=xhr.responseText;
-		console.log(outcome[0].status)
+		let jsonResponse = JSON.parse(XHR.responseText);
+		if (jsonResponse.StatusCode === 0) {
+			console.log("I get it")
+		}
 		if(outcome=="0"){
 			console.log("success")
 			res.send({
