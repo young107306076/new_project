@@ -24,6 +24,7 @@ const DEBUG = true;
 //import childprocess to execute command line request
 const util = require('util')
 const exec = util.promisify(require('child_process').exec);
+var XMLHttpRequest = require('xhr2');
 
 app.use(
 	'/apidoc',
