@@ -353,13 +353,12 @@ app.post('/api/v1/user/test',async function(req, res){
 	var prime = "b73b28fd93c70d73b5ad619167b705e2a4250edb9ebb122ef45f822490b60935";
 	var merchant_id="AppWorksSchool_CTBC";
 
-	console.log(process.env.partner_key)
 
 	let {stdout, stderr} = await exec(
 		`curl ` + 
-		`-X POST https://sandbox.tappaysdk.com/tpc/payment/pay-by-prime ` +
-		`-H "Content-Type: application/json" `+
-		`-H "x-api-key: ${process.env.partner_key} " `+
+		`-X POST https://sandbox.tappaysdk.com/tpc/payment/pay-by-prime \ ` +
+		`-H 'Content-Type: application/json' \ `+
+		`-H 'x-api-key: ${process.env.partner_key}' \ `+
 		`-d '{
 			"partnet_key":"${process.env.partner_key}",
 			"prime":${prime},
