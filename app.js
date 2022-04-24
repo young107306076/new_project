@@ -600,7 +600,7 @@ app.post('/api/v1/order/checkout',async function(req,res){
 		let jsonResponse = JSON.parse(xhr.responseText);
 		let outcome = jsonResponse.status
 		if(outcome=="0"){
-			console.log("success")
+
 			res.send({
 				"status":outcome,
 				"auth_code":jsonResponse.auth_code,
