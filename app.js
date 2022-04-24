@@ -350,13 +350,28 @@ app.get('/api/v1/users/signup/verify',(req,res)=>{
 //unit test
 app.post('/api/v1/user/test',(req, res)=>{
 
-	var jwt = jwt_token.generate_token("test");
+	let {stdout, stderr} = await exec(
+		`curl ` + 
+		`-X POST https://sandbox.tappaysdk.com/tpc/payment/pay-by-prime ` +
+		`-L ` +
+		`-H "Content-Type: application/json" `+
+		`-H "x-api-key: ${process.env.partner_key} " `+
+		`-d '{"prime":${prime},
+			"partnet_key":${process.env.partner_key},
+			"merchant_id":${merchant_id},
+			"details":"TapPay Test",
+			"amount":100,
+			"cardholder":{"phone_number":"0955555555",
+						  "name":"Young",
+						  "email":"young30310@gmail.com",
+						  "zip_code":"12345",
+						  "address":"Taiwan",
+						  "national_id":"A123456789"
+						},
+			"remember":true
+		}' `);
 
-	// console.log(jwt);
-
-	res.send({
-	 	"jwt":jwt
-	})
+	console.log(stdout)
 })
 
 //log in page
@@ -496,6 +511,7 @@ app.post('/api/v1/order/checkout',async function(req,res){
 	var order_number=req.body.order_number;
 	var installment=req.body.installment;
 	
+	const merchant_id="AppWorksSchool_CTBC";
 	//思考一下付款期限的資料從何而來?
 	//var delay_capture_in_days
 	//這個在思考一下要不要放入
@@ -555,12 +571,24 @@ app.post('/api/v1/order/checkout',async function(req,res){
 	//透過 curl 指令走訪 url 指定網址
 	let {stdout, stderr} = await exec(
 		`curl ` + 
-		`-X GET ${url} ` +
-		`-L ` + 
-		`-H "User-Agent: ${headers['User-Agent']}" ` + 
-		`-H "Accept-Language: ${headers['Accept-Language']}" ` + 
-		`-H "Accept: ${headers['Accept']}" ` + 
-		`-H "Cookie: ${headers['Cookie']}" `);
+		`-X POST https://sandbox.tappaysdk.com/tpc/payment/pay-by-prime ` +
+		`-L ` +
+		`-H "Content-Type: application/json" `+
+		`-H "x-api-key: ${process.env.partner_key} " `+
+		`-d '{"prime":${prime},
+			"partnet_key":${process.env.partner_key},
+			"merchant_id":${merchant_id},
+			"details":"TapPay Test",
+			"amount":100,
+			"cardholder":{"phone_number":"0955555555",
+						  "name":"Young",
+						  "email":"young30310@gmail.com",
+						  "zip_code":"12345",
+						  "address":"Taiwan",
+						  "national_id":"A123456789"
+						},
+			"remember":true
+		}' `);
 	
 	
 	//若銀行端顯示付款成功，則將該筆訂單的付款欄位改為True
