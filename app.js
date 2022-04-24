@@ -533,8 +533,6 @@ app.post('/api/v1/order/checkout',async function(req,res){
 							});
 						}
 
-						//close DB
-						connection.end();
 					});
 			});
 		});
@@ -570,20 +568,17 @@ app.post('/api/v1/order/checkout',async function(req,res){
 		if(outcome=="0"){
 
 			//將資料庫訂單的付款狀態改為True
-			try{
+			//update payment status
+			query = "update order set is_payment='True' where id=?";
+			
+			connection.query(query,[order_id], function(err, result, fields){
+				if(err) throw err;
 
-				//update payment status
-				query = "update order set is_payment='True' where id=?";
+				//close DB
+				connection.end();
 				
-				connection.query(query,[order_id], function(err, result, fields){
-					if(err) throw err;
-					
-					console.log("order has been updated")
-				});
-				
-			}catch(err){
-				throw err
-			}
+				console.log("order has been updated")
+			});
 
 			//return payment status
 			res.json({
