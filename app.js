@@ -518,8 +518,6 @@ app.get('/users/profile',auth,(req, res)=>{
 //Order checkout API
 app.post('/api/v1/order/checkout',async function(req,res){
 
-	console.log(req.body)
-
 	//deal with params received from front-end
 	var prime=req.body.prime;
 	var expense=req.body.expense;
