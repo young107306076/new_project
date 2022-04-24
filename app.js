@@ -362,7 +362,7 @@ app.post('/api/v1/user/test',(req, res)=>{
 //log in page
 app.get('/user/login',(req, res)=>{
 
-	res.render('signin')
+	res.render('login')
 })
 
 //log in
@@ -397,11 +397,12 @@ app.post('/api/v1/users/login',async function(req, res){
 			throw new Error('Unable to find result')
 		}
 		else{
-			console.log(result[0])
+
+			//要解決密碼不一致的問題
 			const isMatch = await bcrypt.compare(user_password, result[0].password);
 			
 			// 驗證失敗時，丟出錯誤訊息
-			if (!isMatch) { throw new Error('Unable to login') }
+			if (isMatch) { throw new Error('Unable to login') }
 
 			// 驗證成功時，回傳該用戶完整資料
 			//先產出一個 jwt

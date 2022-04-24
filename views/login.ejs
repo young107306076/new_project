@@ -25,8 +25,6 @@
 						dataType:'json',
 						success: function(data){
 							const dT  = localStorage.setItem("bearer", data.jwt);
-							console.log(dT);
-							alert(data.jwt);
 						},
 						error: function (XHR, status, err){
 							alert(XHR);
