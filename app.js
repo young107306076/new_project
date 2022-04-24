@@ -411,12 +411,12 @@ app.post('/api/v1/users/login',async function(req, res){
 			var jwt=jwt_token.generate_token(id);
 
 			//儲存登入資料
-			query = "insert into user_login ('user_id','token','login_time') values ('test','test','2022-04-20')";
+			const query2 = "insert into user_login ('user_id','token','login_time') values ('"+result[0].id+"','"+jwt+"','2022-04-20')";
 
 			//use transaction insert into three tables
 			connection.beginTransaction(function(err) {
 				if (err) { throw err; }
-				connection.query(query, function (error, results, fields) {
+				connection.query(query2, function (error, results, fields) {
 					if (error) {
 						return connection.rollback(function() {
 						throw error;
