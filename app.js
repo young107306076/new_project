@@ -350,19 +350,37 @@ app.get('/api/v1/users/signup/verify',async function(req,res){
 //unit test
 app.post('/api/v1/user/test',async function(req, res){
 
-	var prime = "853a0a15fd3514f912cede0fb52939e0f3b7766a9aac6d507fc08c953316f41f";
-	var merchant_id="AppWorksSchool_CTBC";
+	var url = "https://sandbox.tappaysdk.com/tpc/payment/pay-by-prime";
 
+	var xhr = new XMLHttpRequest();
+	xhr.open("POST", url);
 
-	let {stdout, stderr} = await exec(
-		`curl ` + 
-		`-X POST https://sandbox.tappaysdk.com/tpc/payment/pay-by-prime ` +
-		`-H 'content-type: application/json' `+
-		`-H 'x-api-key: ${process.env.partner_key}' `+
-		`-d '{"partnet_key":"${process.env.partner_key}","prime":${prime},"merchant_id":${merchant_id},"details":"TapPay Test","amount":100,"cardholder":{"phone_number":"0955555555","name":"Young","email":"young30310@gmail.com","zip_code":"12345","address":"台北市天龍區芝麻街1號1樓","national_id":"A123456789"}}' `
-	);
-//`-d '{"partnet_key":"${process.env.partner_key}","prime":${prime},"merchant_id":${merchant_id},"details":"TapPay Test","amount":100,"cardholder":{"phone_number":"0955555555","name":"Young","email":"young30310@gmail.com","zip_code":"12345","address":"台北市天龍區芝麻街1號1樓","national_id":"A123456789"}}' `
-	console.log(stdout)
+	xhr.setRequestHeader("content-type", "application/json");
+	xhr.setRequestHeader("x-api-key", "partner_6ID1DoDlaPrfHw6HBZsULfTYtDmWs0q0ZZGKMBpp4YICWBxgK97eK3RM");
+
+	xhr.onreadystatechange = function () {
+	if (xhr.readyState === 4) {
+		console.log(xhr.status);
+		console.log(xhr.responseText);
+	}};
+
+	var data = `{
+		"partner_key": "partner_6ID1DoDlaPrfHw6HBZsULfTYtDmWs0q0ZZGKMBpp4YICWBxgK97eK3RM",
+		"prime": "853a0a15fd3514f912cede0fb52939e0f3b7766a9aac6d507fc08c953316f41f",
+		"amount": "1",
+		"merchant_id": "GlobalTesting_CTBC",
+		"details": "Some item",
+		"cardholder": {
+			"phone_number": "+886923456789",
+			"name": "王小明",
+			"email": "LittleMing@Wang.com",
+			"zip_code": "100",
+			"address": "台北市天龍區芝麻街1號1樓",
+			"national_id": "A123456789"
+		}
+	}`;
+
+	xhr.send(data);
 
 })
 
@@ -564,23 +582,10 @@ app.post('/api/v1/order/checkout',async function(req,res){
 	let {stdout, stderr} = await exec(
 		`curl ` + 
 		`-X POST https://sandbox.tappaysdk.com/tpc/payment/pay-by-prime ` +
-		`-L ` +
-		`-H "Content-Type: application/json" `+
-		`-H "x-api-key: ${process.env.partner_key} " `+
-		`-d '{"prime":${prime},
-			"partnet_key":${process.env.partner_key},
-			"merchant_id":${merchant_id},
-			"details":"TapPay Test",
-			"amount":100,
-			"cardholder":{"phone_number":"0955555555",
-						  "name":"Young",
-						  "email":"young30310@gmail.com",
-						  "zip_code":"12345",
-						  "address":"Taiwan",
-						  "national_id":"A123456789"
-						},
-			"remember":true
-		}' `);
+		`-H 'content-type: application/json' `+
+		`-H 'x-api-key: ${process.env.partner_key}' `+
+		`-d '{"partnet_key":"${process.env.partner_key}","prime":${prime},"merchant_id":${merchant_id},"details":"TapPay Test","amount":100,"cardholder":{"phone_number":"0955555555","name":"Young","email":"young30310@gmail.com","zip_code":"12345","address":"台北市天龍區芝麻街1號1樓","national_id":"A123456789"}}' `
+	);
 	
 	
 	//若銀行端顯示付款成功，則將該筆訂單的付款欄位改為True
