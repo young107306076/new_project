@@ -99,27 +99,27 @@
                             else{
                                 console.log("success");
                                 //傳送ajax到後端order_api
-                                // $.ajax({
-                                //     type: "POST",
-                                //     url: "http://ec2-52-9-59-184.us-west-1.compute.amazonaws.com/api/v1/order/checkout",
-                                //     data:{
-                                //         prime:$("#product_id").val(),
-                                //         expense:$("#product_detail_id").val(),
-                                //         products:$("#product_color_id").val(),
-                                //         order_number:$("#product_name").val(),
-                                //         installment:$("#product_type").val(),
-                                //         currency:$("#product_color").val()
-                                //     },
-                                //     dataType: "json",
-                                //     success: function (response) {
-                                //         console.log(response);
-                                //         //取得後端response
+                                $.ajax({
+                                    type: "POST",
+                                    url: "http://ec2-52-9-59-184.us-west-1.compute.amazonaws.com/api/v1/order/checkout",
+                                    data:{
+                                        prime:result.card.prime,
+                                        expense:"200",
+                                        products:"",
+                                        order_number:"test-1",
+                                        installment:"1",
+                                        currency:"NTD"
+                                    },
+                                    dataType: "json",
+                                    success: function (response) {
+                                        console.log(response);
+                                        //取得後端response
 
-                                //     },
-                                //     error: function (thrownError) {
-                                //         console.log(thrownError);
-                                //     }
-                                // });
+                                    },
+                                    error: function (thrownError) {
+                                        console.log(thrownError);
+                                    }
+                                });
                             }
                         })
                     });
