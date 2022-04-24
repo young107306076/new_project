@@ -606,9 +606,7 @@ app.post('/api/v1/order/checkout',async function(req,res){
 		//並新增一筆付款成功的訂單 (這有必要???)
 		let outcome=xhr.responseText;
 		let jsonResponse = JSON.parse(xhr.responseText);
-		if (jsonResponse.StatusCode === 0) {
-			console.log("I get it")
-		}
+		console.log(jsonResponse.status)
 		if(outcome=="0"){
 			console.log("success")
 			res.send({
