@@ -356,7 +356,6 @@ app.post('/api/v1/user/test',async function(req, res){
 	let {stdout, stderr} = await exec(
 		`curl ` + 
 		`-X POST https://sandbox.tappaysdk.com/tpc/payment/pay-by-prime ` +
-		`-L ` +
 		`-H "Content-Type: application/json" `+
 		`-H "x-api-key: ${process.env.partner_key} " `+
 		`-d '{
