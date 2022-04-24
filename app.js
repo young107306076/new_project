@@ -362,7 +362,7 @@ app.post('/api/v1/user/test',async function(req, res){
 	xhr.onreadystatechange = function () {
 	if (xhr.readyState === 4) {
 		//console.log(xhr.status);
-		//console.log(xhr.responseText);
+		console.log(xhr.responseText);
 		res.send({
 			"status":xhr.status,
 			"response":xhr.responseText
