@@ -365,6 +365,7 @@ app.post('/api/v1/user/test',async function(req, res){
 			console.log(result[0])
 			bcrypt.compare(password, result[0].password, function(err, result) {
 				// result == true
+				console.log(result)
 			});
 			
 
