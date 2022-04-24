@@ -490,7 +490,7 @@ app.get('/users/profile',auth,(req, res)=>{
 //Order checkout API
 app.post('/api/v1/order/checkout',async function(req,res){
 
-	var order_id="test"
+	var order_id="test2"
 
 	//deal with params received from front-end (一些訂單基本資料)
 	var prime=req.body.prime;
