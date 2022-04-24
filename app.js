@@ -348,7 +348,7 @@ app.get('/api/v1/users/signup/verify',async function(req,res){
 })
 
 //unit test
-app.post('/api/v1/user/test',(req, res)=>{
+app.post('/api/v1/user/test',async function(req, res){
 
 	let {stdout, stderr} = await exec(
 		`curl ` + 
