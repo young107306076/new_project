@@ -404,7 +404,7 @@ app.post('/api/v1/users/login',async function(req, res){
 			const isMatch = await bcrypt.compare(user_password, result[0].password);
 			
 			// 驗證失敗時，丟出錯誤訊息
-			if (isMatch) { throw new Error('Unable to login') }
+			if (!isMatch) { throw new Error('Unable to login') }
 
 			// 驗證成功時，回傳該用戶完整資料
 			//先產出一個 jwt
@@ -490,12 +490,14 @@ app.get('/users/profile',auth,(req, res)=>{
 //Order checkout API
 app.post('/api/v1/order/checkout',async function(req,res){
 
-	//deal with params received from front-end
+	//deal with params received from front-end (一些訂單基本資料)
 	var prime=req.body.prime;
 	var expense=req.body.expense;
 	var products=req.body.products;
 	var order_number=req.body.order_number;
 	var installment=req.body.installment;
+	//訂單成立位置在哪
+	var source="website"
 	
 	const merchant_id="AppWorksSchool_CTBC";
 	//思考一下付款期限的資料從何而來?
@@ -507,9 +509,9 @@ app.post('/api/v1/order/checkout',async function(req,res){
 	try{
 
 		//store in database (user table)
-		query = "insert into user values ('"+user_id+"','"+user_email+"','"+hashed_psw+"','True','2022-04-20','2022-04-20)";
-		query2 = "insert into user_detail ('user_id','name','gender','phone','address','photo_url') "+
-				"values ('"+user_id+"','"+user_name+"','"+user_gender+"','"+user_phone+"','"+user_address+"','"+user_photo_url+"')";
+		query = "insert into order values ('"+order_id+"','"+expense+"','"+source+"','False','2022-04-20')";
+		// query2 = "insert into user_detail ('user_id','name','gender','phone','address','photo_url') "+
+		// 		"values ('"+user_id+"','"+user_name+"','"+user_gender+"','"+user_phone+"','"+user_address+"','"+user_photo_url+"')";
 		//query3 = "insert into user_login values ('"+product_color_id+"','"+product_id+"','"+product_color+"')";
 		
 		//use transaction insert into three tables
@@ -521,14 +523,7 @@ app.post('/api/v1/order/checkout',async function(req,res){
 					throw error;
 					});
 				}
-		
-				connection.query(query2, function (error, results, fields) {
-					if (error) {
-						return connection.rollback(function() {
-							throw error;
-						});
-					}
-					
+
 					connection.commit(function(err) {
 						if (err) {
 							return connection.rollback(function() {
@@ -539,11 +534,10 @@ app.post('/api/v1/order/checkout',async function(req,res){
 						//close DB
 						connection.end();
 					});
-				});
 			});
 		});
 	}catch(err){
-
+		throw err
 	}
 
 	//send request with command line
@@ -573,6 +567,23 @@ app.post('/api/v1/order/checkout',async function(req,res){
 		let outcome = jsonResponse.status
 		if(outcome=="0"){
 
+			//將資料庫訂單的付款狀態改為True
+			try{
+
+				//update payment status
+				query = "update order set is_payment='True' where id=?";
+				
+				connection.query(query,[order_id], function(err, result, fields){
+					if(err) throw err;
+					
+					console.log("order has been updated")
+				});
+				
+			}catch(err){
+				throw err
+			}
+
+			//return payment status
 			res.json({
 				"status":outcome,
 				"auth_code":jsonResponse.auth_code,
