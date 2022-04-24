@@ -359,7 +359,8 @@ app.post('/api/v1/user/test',async function(req, res){
 		`-X POST https://sandbox.tappaysdk.com/tpc/payment/pay-by-prime ` +
 		`-H 'content-type: application/json' `+
 		`-H 'x-api-key: ${process.env.partner_key}' `+
-		`-d '{"partnet_key":"${process.env.partner_key}","prime":${prime},"merchant_id":${merchant_id},"details":"TapPay Test","amount":100,"cardholder":{"phone_number":"0955555555","name":"Young","email":"young30310@gmail.com","zip_code":"12345","address":"台北市天龍區芝麻街1號1樓","national_id":"A123456789"}}' `);
+		`-d '{"partnet_key":"${process.env.partner_key}","prime":${prime},"merchant_id":${merchant_id},"details":"TapPay Test","amount":100,"cardholder":{"phone_number":"0955555555","name":"Young","email":"young30310@gmail.com","zip_code":"12345","address":"台北市天龍區芝麻街1號1樓","national_id":"A123456789"}}' `
+	);
 
 	console.log(stdout)
 
