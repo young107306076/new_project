@@ -350,6 +350,8 @@ app.get('/api/v1/users/signup/verify',async function(req,res){
 //unit test
 app.post('/api/v1/user/test',async function(req, res){
 
+	var prime = "b73b28fd93c70d73b5ad619167b705e2a4250edb9ebb122ef45f822490b60935";
+
 	let {stdout, stderr} = await exec(
 		`curl ` + 
 		`-X POST https://sandbox.tappaysdk.com/tpc/payment/pay-by-prime ` +
