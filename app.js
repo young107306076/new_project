@@ -352,7 +352,7 @@ app.get('/api/v1/users/signup/verify',async function(req,res){
 app.post('/api/v1/user/test',async function(req, res){
 
 	password="test"
-
+	user_email="young30310@gmail.com"
 	const query="select * from user where email=?";
 	connection.query(query,[user_email], async function(err, result){
 
