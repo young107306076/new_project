@@ -566,13 +566,6 @@ app.post('/api/v1/order/checkout',async function(req,res){
 
 						//close DB
 						connection.end();
-						
-						//if successfully store
-						res.status(201).send({ 
-							"status_code":'200',
-							"user_id": user_id,
-							"user_email":user_email,
-						});
 					});
 				});
 			});
