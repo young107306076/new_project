@@ -411,7 +411,7 @@ app.post('/api/v1/users/login',async function(req, res){
 			var jwt=jwt_token.generate_token(id);
 
 			//儲存登入資料
-			const query2 = "insert into user_login ('user_id','token','login_time') values ('"+result[0].id+"','"+jwt+"','2022-04-20');";
+			const query2 = "insert into `user_login` (`user_id`,`token`,`login_time`) values ('"+result[0].id+"','"+jwt+"','2022-04-20');";
 
 			//use transaction insert into three tables
 			connection.beginTransaction(function(err) {
