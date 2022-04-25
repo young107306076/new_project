@@ -253,55 +253,56 @@ app.post('/api/v1/product', profileUpload.single('avatar'),async function(req, r
 			console.log(err, err.stack);
 		}else{
 			console.log('Bucket Created Successfully', data.Location);
-		}
-	});
 
-	//Create query1, query2, query3
-	query = "insert into product values ('"+product_id+"','"+product_name+"','"+product_type+"','2022-04-15')";
-	query2 = "insert into product_color values ('"+product_color_id+"','"+product_id+"','"+product_color+"')";
-	query3 = "insert into product_detail values ('"+product_detail_id+"','"+product_color_id+"','"+product_size+"')";
+			//開始存入資料庫
+			//Create query1, query2, query3
+			query = "insert into product values ('"+product_id+"','"+product_name+"','"+product_type+"','2022-04-15')";
+			query2 = "insert into product_color values ('"+product_color_id+"','"+product_id+"','"+product_color+"')";
+			query3 = "insert into product_detail values ('"+product_detail_id+"','"+product_color_id+"','"+product_size+"')";
 
-	//use transaction insert into three tables
-	connection.beginTransaction(function(err) {
-		if (err) { throw err; }
-		connection.query(query, function (error, results, fields) {
-			if (error) {
-				return connection.rollback(function() {
-				throw error;
-				});
-			}
-	  
-			connection.query(query2, function (error, results, fields) {
-				if (error) {
-					return connection.rollback(function() {
-						throw error;
-					});
-				}
-				
-				connection.query(query3, function (error, results, fields) {
+			//use transaction insert into three tables
+			connection.beginTransaction(function(err) {
+				if (err) { throw err; }
+				connection.query(query, function (error, results, fields) {
 					if (error) {
 						return connection.rollback(function() {
-							throw error;
+						throw error;
 						});
 					}
-					connection.commit(function(err) {
-						if (err) {
+			
+					connection.query(query2, function (error, results, fields) {
+						if (error) {
 							return connection.rollback(function() {
-							throw err;
+								throw error;
 							});
 						}
+						
+						connection.query(query3, function (error, results, fields) {
+							if (error) {
+								return connection.rollback(function() {
+									throw error;
+								});
+							}
+							connection.commit(function(err) {
+								if (err) {
+									return connection.rollback(function() {
+									throw err;
+									});
+								}
 
-						connection.end();
+								connection.end();
 
-						console.log('success!');
-						res.send("200_ok");
+								console.log('success!');
+								res.send("200_ok");
+							});
+						});
 					});
 				});
 			});
-		});
-	});
 
-	//trans.execute();
+			//trans.execute();
+		}
+	});
 })
 
 app.get('/admin',auth,(req, res)=>{
@@ -336,61 +337,81 @@ app.post('/api/v1/users/signup',(req, res)=>{
 	
 	//Singly handling picture
 	var user_id=req.query.id;
-	var user_photo_url="test";
 
-	//handling password
-	var hashed_psw=jwt_token.encode_psw(user_password);
+	//set up image storage
+	//先將圖片存入S3
+	const params = {
+		Bucket: 'appwork-bucket', // 相簿位子
+		Key: uuidv4(), // 你希望儲存在 S3 上的檔案名稱
+		Body: req.file.buffer, // 檔案
+		ACL: 'public-read', // 檔案權限
+		ContentType: req.file.mimetype // 副檔名
+	};
 
-	try{
+	s3.upload(params, function(err, data) {
+		if (err) {
+			console.log(err, err.stack);
+		}else{
+			console.log('Bucket Created Successfully', data.Location);
 
-		//store in database (user table)
-		query = "insert into user values ('"+user_id+"','"+user_email+"','"+hashed_psw+"','True','2022-04-20','2022-04-20')";
-		query2 = "insert into user_detail  "+
-				"values ('detail_test','"+user_id+"','"+user_name+"','"+user_gender+"','"+user_phone+"','"+user_address+"','"+user_photo_url+"')";
-		//query3 = "insert into user_login values ('"+product_color_id+"','"+product_id+"','"+product_color+"')";
-		//('user_id','name','gender','phone','address','photo_url')
-		//use transaction insert into three tables
-		connection.beginTransaction(function(err) {
-			if (err) { throw err; }
-			connection.query(query, function (error, results, fields) {
-				if (error) {
-					return connection.rollback(function() {
-					throw error;
-					});
-				}
-		
-				connection.query(query2, function (error, results, fields) {
-					if (error) {
-						return connection.rollback(function() {
-							throw error;
-						});
-					}
-					
-					connection.commit(function(err) {
-						if (err) {
+			//store use data
+			var user_photo_url=data.Location;
+
+			//handling password
+			var hashed_psw=jwt_token.encode_psw(user_password);
+
+			try{
+
+				//store in database (user table)
+				query = "insert into user values ('"+user_id+"','"+user_email+"','"+hashed_psw+"','True','2022-04-20','2022-04-20')";
+				query2 = "insert into user_detail  "+
+						"values ('detail_test','"+user_id+"','"+user_name+"','"+user_gender+"','"+user_phone+"','"+user_address+"','"+user_photo_url+"')";
+				//query3 = "insert into user_login values ('"+product_color_id+"','"+product_id+"','"+product_color+"')";
+				//('user_id','name','gender','phone','address','photo_url')
+				//use transaction insert into three tables
+				connection.beginTransaction(function(err) {
+					if (err) { throw err; }
+					connection.query(query, function (error, results, fields) {
+						if (error) {
 							return connection.rollback(function() {
-							throw err;
+							throw error;
 							});
 						}
+				
+						connection.query(query2, function (error, results, fields) {
+							if (error) {
+								return connection.rollback(function() {
+									throw error;
+								});
+							}
+							
+							connection.commit(function(err) {
+								if (err) {
+									return connection.rollback(function() {
+									throw err;
+									});
+								}
 
-						//close DB
-						connection.end();
-						
-						//if successfully store
-						res.status(201).send({ 
-							"status_code":'200',
-							"user_id": user_id,
-							"user_email":user_email,
+								//close DB
+								connection.end();
+								
+								//if successfully store
+								res.status(201).send({ 
+									"status_code":'200',
+									"user_id": user_id,
+									"user_email":user_email,
+								});
+							});
 						});
 					});
 				});
-			});
-		});
 
-	}catch(err){
+			}catch(err){
 
-		res.status(400).send(err);
-	}
+				res.status(400).send(err);
+			}
+		} 
+	});
 })
 
 //sign up check page
@@ -560,11 +581,8 @@ app.post('/api/v1/order/checkout',async function(req,res){
 	//將訂單資料存入資料庫
 	try{
 
-		//store in database (user table)
+		//store in database (order table)
 		query = "insert into `order` values ('"+order_id+"','"+expense+"','"+source+"','False','2022-04-20')";
-		// query2 = "insert into user_detail ('user_id','name','gender','phone','address','photo_url') "+
-		// 		"values ('"+user_id+"','"+user_name+"','"+user_gender+"','"+user_phone+"','"+user_address+"','"+user_photo_url+"')";
-		//query3 = "insert into user_login values ('"+product_color_id+"','"+product_id+"','"+product_color+"')";
 		
 		//use transaction insert into three tables
 		connection.beginTransaction(function(err) {
