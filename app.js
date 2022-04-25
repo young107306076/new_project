@@ -214,7 +214,7 @@ app.post('/api/v1/product/test', profileUpload.single('avatar'),async function(r
 		Bucket: 'appwork-bucket', // 相簿位子
 		Key: uuidv4(), // 你希望儲存在 S3 上的檔案名稱
 		Body: file_test, // 檔案
-		ACL: 'public-read', // 檔案權限
+		//ACL: 'public-read', // 檔案權限
 		ContentType: req.file.mimetype // 副檔名
 	};
 	
