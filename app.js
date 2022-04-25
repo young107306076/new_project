@@ -61,12 +61,10 @@ app.set('view engine', 'ejs');
 var connection = mysql.createConnection({
   	host: '127.0.0.1',
   	user: 'root',
-  	password: 'young0709',
+  	password: process.env.database_pd,
   	database: 'stylist',
  	charset: 'UTF8_GENERAL_CI'
 });
-
-
 
 // 建立連線後不論是否成功都會呼叫
 connection.connect(function(err){
