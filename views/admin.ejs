@@ -21,7 +21,8 @@
 							name:$("#product_name").val(),
 							type:$("#product_type").val(),
 							color:$("#product_color").val(),
-							size:$("#product_size").val()
+							size:$("#product_size").val(),
+							image:$("#product_image").prop('files')
 						},
 						dataType: "json",
 						success: function (response) {

@@ -14,6 +14,7 @@ const bcrypt = require('bcrypt')
 // 額外加入驗證 Middleware
 const auth = require('./middleware/auth')
 
+//Create app
 var app = express();
 
 //MySQL&Transaction Setup
@@ -25,6 +26,11 @@ const DEBUG = true;
 const util = require('util')
 const exec = util.promisify(require('child_process').exec);
 var XMLHttpRequest = require('xhr2');
+
+//import image upload module & aws config
+const profileUpload = require('./middleware/file/index');
+const awsConfig = require('./models/aws_s3_setting');
+import { v4 as uuidv4 } from 'uuid';
 
 app.use(
 	'/apidoc',
@@ -62,13 +68,7 @@ app.use(bodyParser.urlencoded({extended: false}));
 //這是首頁
 app.get('/', function (req, res) {
 
-	var jwt = jwt_token.generate_token("test");
-
-	console.log(jwt);
-
-	res.send({
-	 	"jwt":jwt
-	})
+	res.send("hello world!")
 })
 
 //設計API
@@ -190,12 +190,29 @@ app.get('/api/v1/product',function(req, res){
 })
 
 app.post('/api/v1/product/test', function(req, res){
-	console.log(req.body);
-	//console.log(req.query.id);
+
+	var file_test=req.file.buffer;
+	
+	//先將圖片存入S3
+	const params = {
+		Bucket: 'appwork-bucket', // 相簿位子
+		Key: uuidv4(), // 你希望儲存在 S3 上的檔案名稱
+		Body: file_test, // 檔案
+		ACL: 'public-read', // 檔案權限
+		ContentType: req.file.mimetype // 副檔名
+	};
+	
+	awsConfig.s3.upload(params, function(err, data) {
+		if (err) {
+			console.log(err, err.stack);
+		}else{
+			console.log('Bucket Created Successfully', data.Location);
+		}
+	});
 })
 
 //要加上所有產品Database需要的Column
-app.post('/api/v1/product',function(req, res){
+app.post('/api/v1/product', profileUpload.single('avatar'),async function(req, res){
 	
 	//Get request Parameter
 	var product_id = req.body.id;
@@ -205,6 +222,23 @@ app.post('/api/v1/product',function(req, res){
 	var product_color = req.body.color;
 	var product_color_id = req.body.color_id;
 	var product_size = req.body.size;
+
+	//先將圖片存入S3
+	const params = {
+		Bucket: 'appwork-bucket', // 相簿位子
+		Key: uuidv4(), // 你希望儲存在 S3 上的檔案名稱
+		Body: req.file.buffer, // 檔案
+		ACL: 'public-read', // 檔案權限
+		ContentType: req.file.mimetype // 副檔名
+	};
+	
+	awsConfig.s3.upload(params, function(err, data) {
+		if (err) {
+			console.log(err, err.stack);
+		}else{
+			console.log('Bucket Created Successfully', data.Location);
+		}
+	});
 
 	//Create query1, query2, query3
 	query = "insert into product values ('"+product_id+"','"+product_name+"','"+product_type+"','2022-04-15')";
@@ -569,7 +603,7 @@ app.post('/api/v1/order/checkout',async function(req,res){
 
 			//將資料庫訂單的付款狀態改為True
 			//update payment status
-			query = "update order set is_payment='True' where id=?";
+			query = "update `order` set is_payment='True' where id=?";
 			
 			connection.query(query,[order_id], function(err, result, fields){
 				if(err) throw err;
