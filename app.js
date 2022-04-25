@@ -28,10 +28,25 @@ const exec = util.promisify(require('child_process').exec);
 var XMLHttpRequest = require('xhr2');
 
 //import image upload module & aws config
-const profileUpload = require('./middleware/file/index');
+//const profileUpload = require('./middleware/file/index');
 const awsConfig = require('./models/aws_s3_setting');
 const { v4: uuidv4 } = require('uuid');
 const multer = require('multer');
+
+// 圖片上傳
+const profileUpload = multer({
+	limit: {
+	  // 限制上傳檔案的大小為 1MB
+	  fileSize: 1000000
+	},
+	fileFilter(req, file, cb) {
+	  // 只接受三種圖片格式
+	  if (!file.originalname.match(/\.(jpg|jpeg|png)$/)) {
+		cb(null, false);
+	  }
+	  cb(null, true);
+	}
+});
 
 app.use(
 	'/apidoc',
@@ -190,7 +205,7 @@ app.get('/api/v1/product',function(req, res){
 	//res.send("detail_id: "+product_detail_id);
 })
 
-app.post('/api/v1/product/test', function(req, res){
+app.post('/api/v1/product/test', profileUpload.single('avatar'),async function(req, res){
 
 	var file_test=req.file.buffer;
 	
