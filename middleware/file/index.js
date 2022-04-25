@@ -16,5 +16,5 @@ const profileUpload = multer({
 })
 
 module.exports = {
-  profileUpload
+  "profileUpload":profileUpload
 };

@@ -31,6 +31,7 @@ var XMLHttpRequest = require('xhr2');
 const profileUpload = require('./middleware/file/index');
 const awsConfig = require('./models/aws_s3_setting');
 const { v4: uuidv4 } = require('uuid');
+const multer = require('multer');
 
 app.use(
 	'/apidoc',
