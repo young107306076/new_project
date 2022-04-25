@@ -30,7 +30,7 @@ var XMLHttpRequest = require('xhr2');
 //import image upload module & aws config
 const profileUpload = require('./middleware/file/index');
 const awsConfig = require('./models/aws_s3_setting');
-import { v4 as uuidv4 } from 'uuid';
+const { v4: uuidv4 } = require('uuid');
 
 app.use(
 	'/apidoc',
